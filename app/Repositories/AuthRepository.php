@@ -35,4 +35,21 @@ class AuthRepository implements AuthRepositoryContract
     {
         return $user->createToken('api_token')->plainTextToken;
     }
+
+    /**
+     * Revoke current user token/tokens
+     *
+     * @param bool $logoutFromDevices Optional
+     * @return void
+     */
+    public function revokeToken(bool $logoutFromDevices = false): void
+    {
+        $logoutFromDevices ?
+            // revoke all token to logout from all devices
+            request()->user()->tokens()->delete()
+        :
+            // revoke only current token
+            request()->user()->currentAccessToken()->delete()
+        ;
+    }
 }

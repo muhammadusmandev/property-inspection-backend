@@ -8,6 +8,7 @@ Route::prefix('v1')->group(function () {
     
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
+        Route::delete('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     });
 
     Route::get('/auth/user', function (Request $request) {

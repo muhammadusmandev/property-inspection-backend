@@ -13,4 +13,12 @@ interface AuthService
      * @return \Illuminate\Http\JsonResponse|UserLoginResource|null
      */
     public function loginUser(array $credentials): ?UserLoginResource;
+
+    /**
+     * Logout current user.
+     *
+     * @param bool $logoutFromDevices Optional
+     * @return void
+     */
+    public function logoutUser(bool $logoutFromDevices = false): void;
 }

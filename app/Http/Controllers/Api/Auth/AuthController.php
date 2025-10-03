@@ -54,7 +54,32 @@ class AuthController extends Controller
             ], 403);
 
         } catch (\Exception $e) {
-            $this->logException($e, $request, 'Login API request failed');
+            $this->logException($e, 'Login API request failed');
+
+            return $this->errorResponse('Oops! Something went wrong.', [
+                'error' => $e->getMessage()
+            ], 500);
+            
+        }
+    }
+
+    /**
+     * Handle user logout.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function logout(): JsonResponse
+    {
+        try {
+            $logoutFromDevices = filter_var(request()->query('logout_from_devices', false), FILTER_VALIDATE_BOOLEAN);
+            $this->authService->logoutUser($logoutFromDevices);
+
+            return $this->successResponse('User logout successfully.');
+
+        } catch (\Exception $e) {
+            $this->logException($e, 'Logout API request failed');
 
             return $this->errorResponse('Oops! Something went wrong.', [
                 'error' => $e->getMessage()

@@ -20,4 +20,12 @@ interface AuthRepository
      * @return string
      */
     public function createToken(User $user): string;
+
+    /**
+     * Revoke current user token/tokens
+     *
+     * @param bool $logoutFromDevices Optional
+     * @return void
+     */
+    public function revokeToken(bool $logoutFromDevices = false): void;
 }

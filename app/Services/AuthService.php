@@ -25,7 +25,7 @@ class AuthService implements AuthServiceContract
     }
 
     /**
-     * Attempt to login a customer with credentials.
+     * Attempt to login a user with credentials.
      *
      * @param array $credentials
      * @return \Illuminate\Http\JsonResponse|UserLoginResource|null
@@ -49,5 +49,22 @@ class AuthService implements AuthServiceContract
         $token = $this->authRepository->createToken($user);
 
         return new UserLoginResource($user, $token);
+    }
+
+    /**
+     * Attempt to logout current user.
+     *
+     * @param bool $logoutFromDevices Optional
+     * @return void
+     */
+
+    public function logoutUser(bool $logoutFromDevices = false): void
+    {
+        $token = request()->user()?->currentAccessToken();
+
+        // revoke if token is valid otherwise (missing, invalid, already logged out or deleted)
+        if($token){
+            $this->authRepository->revokeToken($logoutFromDevices);
+        }
     }
 }
