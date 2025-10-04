@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use App\Services\Contracts\AuthService as AuthServiceContract;
-use App\Requests\LoginRequest;
+use App\Requests\{LoginRequest, RegisterRequest};
 use App\Traits\{ Loggable, ApiJsonResponse };
 
 class AuthController extends Controller
@@ -55,6 +56,38 @@ class AuthController extends Controller
 
         } catch (\Exception $e) {
             $this->logException($e, 'Login API request failed');
+
+            return $this->errorResponse('Oops! Something went wrong.', [
+                'error' => $e->getMessage()
+            ], 500);
+            
+        }
+    }
+
+    /**
+     * Handle user register.
+     *
+     * @param  \App\Http\Requests\RegisterRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        try {
+            $validData = $request->validated();
+            $data = $this->authService->registerUser($validData);
+
+            return $this->successResponse('Great! User register successfully.', $data);
+
+        } catch (QueryException $qe) {
+            $this->logException($qe, 'Oops! Something went wrong while saving your data. Please try again.');
+
+            return $this->errorResponse('Oops! Something went wrong.', [
+                'error' => 'Oops! Something went wrong while saving your data. Please try again.'
+            ], 500);
+        } catch (\Exception $e) {
+            $this->logException($e, 'Register API request failed');
 
             return $this->errorResponse('Oops! Something went wrong.', [
                 'error' => $e->getMessage()

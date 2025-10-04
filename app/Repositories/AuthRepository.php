@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\AuthRepository as AuthRepositoryContract;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
+use Exception;
 use App\Models\User;
 
 class AuthRepository implements AuthRepositoryContract
@@ -34,6 +37,37 @@ class AuthRepository implements AuthRepositoryContract
     public function createToken($user): string
     {
         return $user->createToken('api_token')->plainTextToken;
+    }
+
+    /**
+     * Create new user
+     *
+     * @param array $userDetails
+     * @return User $user
+     * 
+     * @throws \Illuminate\Database\QueryException database query fails exception.
+     * @throws Exception general exception.
+     */
+    public function createUser(array $userDetails): User
+    {
+        try {
+            return DB::transaction(function () use ($userDetails) {
+                return User::create([
+                    'name' => $userDetails['first_name'] . ' ' . $userDetails['last_name'],
+                    'email' => $userDetails['email'],
+                    'password' => Hash::make($userDetails['password']),
+                    'phone_number' => $userDetails['phone_number'] ? phone($userDetails['phone_number'])->formatE164() : null,
+                    'profile_photo' => $userDetails['profile_photo'] ?? null,
+                    'gender' => $userDetails['gender'],
+                    'date_of_birth' => $userDetails['date_of_birth'],
+                    'role' => $userDetails['role'] ?? 'realtor'
+                ]);
+            });
+        } catch (QueryException $qe) {
+            throw $qe;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**

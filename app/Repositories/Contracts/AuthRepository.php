@@ -21,6 +21,14 @@ interface AuthRepository
      */
     public function createToken(User $user): string;
 
+     /**
+     * Create new user
+     *
+     * @param array $userDetails
+     * @return User $user
+     */
+    public function createUser(array $userDetails): User;
+
     /**
      * Revoke current user token/tokens
      *

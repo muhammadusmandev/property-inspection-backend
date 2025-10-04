@@ -2,7 +2,7 @@
 
 namespace App\Services\Contracts;
 
-use App\Resources\UserLoginResource;
+use App\Resources\{ UserLoginResource, UserRegisterResource };
 
 interface AuthService
 {
@@ -13,6 +13,15 @@ interface AuthService
      * @return \Illuminate\Http\JsonResponse|UserLoginResource|null
      */
     public function loginUser(array $credentials): ?UserLoginResource;
+
+    /**
+     * Register new user.
+     *
+     * @param array $userDetails
+     * @return \Illuminate\Http\JsonResponse|UserRegisterResource|null
+     */
+
+    public function registerUser(array $userDetails): ?UserRegisterResource;
 
     /**
      * Logout current user.
