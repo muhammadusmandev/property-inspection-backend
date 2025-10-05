@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\Contracts\AuthService as AuthServiceContract;
 use App\Repositories\Contracts\AuthRepository as AuthRepositoryContract;
+use App\Services\Contracts\OtpService as OtpServiceContract;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Cache;
@@ -16,14 +17,16 @@ use App\Models\User;
 class AuthService implements AuthServiceContract
 {
     protected $authRepository;
+    protected $otpService;
 
     /**
      * Inject AuthRepositoryContract via constructor.
      * @param \App\Repositories\Contracts\AuthRepository $authRepository
     */
-    public function __construct(AuthRepositoryContract $authRepository)
+    public function __construct(AuthRepositoryContract $authRepository, OtpServiceContract $otpService)
     {
         $this->authRepository = $authRepository;
+        $this->otpService = $otpService;
     }
 
     /**
@@ -63,7 +66,7 @@ class AuthService implements AuthServiceContract
     public function registerUser(array $userDetails): ?UserRegisterResource
     {
         $user = $this->authRepository->createUser($userDetails);
-        $otp = $this->generateOTP($user);
+        $otp = $this->otpService->generateOTP($user->id);
 
         return new UserRegisterResource($user, $otp);
     }
@@ -83,24 +86,5 @@ class AuthService implements AuthServiceContract
         if($token){
             $this->authRepository->revokeToken($logoutFromDevices);
         }
-    }
-
-    /**
-     * Generate OTP and save in sessions.
-     *
-     * @param User $user
-     * @return int
-     */
-
-    public function generateOTP($user): int
-    {
-        // generate random 6 digits otp
-        $otp = rand(100000, 999999);
-        $otpKey = "otp:$user->id";
-
-        // save otp in cache with 30 minutes expiry
-        Cache::put($otpKey, $otp, now()->addMinutes(30));
-
-        return $otp;
     }
 }

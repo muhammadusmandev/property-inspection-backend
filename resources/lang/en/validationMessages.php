@@ -23,5 +23,11 @@ return [
     'role' => [
         'in' => 'Role must be (realter)',
     ],
+    'user_id' => [
+        'exists' => 'User doesn\'t exists.',
+    ],
+    'otp' => [
+        'digits' => 'Otp must be :digits long.',
+    ],
     'wrong_credentials' => 'The provided credentials are incorrect.'
 ];
