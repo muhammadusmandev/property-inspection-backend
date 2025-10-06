@@ -24,11 +24,9 @@ class OTPVerifyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [
-                'required', 
-                'integer', 
-                'exists:users,id'
-            ],
+            'identifier' => 'required|string|in:email,phone',
+            'email' => 'required_if:identifier,email|email',
+            'phone' => 'required_if:identifier,phone|string|phone:AUTO',
             'otp' => [
                 'required',
                 'digits:6'
@@ -44,8 +42,9 @@ class OTPVerifyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.exists' => __('validationMessages.user_id.exists'),
             'otp.digits' => __('validationMessages.otp.digits', ['digits' => 6]),
+            'identifier.in' => __('validationMessages.identifier.in'),
+            'phone.phone' => __('validationMessages.phone_number.phone'),
         ];
     }
 

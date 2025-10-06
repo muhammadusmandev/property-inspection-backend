@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\Contracts\OtpService as OtpServiceContract;
 use Illuminate\Support\Facades\Cache;
+use App\Enums\OtpIdentifier;
 use App\Models\User;
 
 class OtpService implements OtpServiceContract
@@ -24,14 +25,20 @@ class OtpService implements OtpServiceContract
     /**
      * Verify OTP.
      *
-     * @param int $user_id
+     * @param string $identifier
+     * @param string $identifierValue
      * @param int $otp
      * @return string
      */
-    public function verify(int $user_id, int $otp): string
+    public function verify(string $identifier, $identifierValue, int $otp): string
     {
-        $user = User::findOrFail($user_id);
-        $otpKey = "otp:$user->id";
+        OtpIdentifier::in($identifier);
+        
+        // format phone before checking
+        if($identifier === "phone")
+            $identifierValue = phone($identifierValue)->formatE164();
+
+        $otpKey = "otp:$identifierValue";
 
         // check if user cache not expired or invalid or otp value match
         if (Cache::has($otpKey)) {
@@ -52,32 +59,40 @@ class OtpService implements OtpServiceContract
     /**
      * Resend OTP.
      *
-     * @param int $userId
+     * @param string $identifier
+     * @param string $identifierValue
      * @return int $otp
      */
-    public function resend(int $userId): int
+    public function resend(string $identifier, $identifierValue): int
     {
-        return $this->generateOTP($userId);
+        return $this->generateOTP($identifier, $identifierValue);
     }
 
     /**
      * Generate OTP and save in caches.
      *
-     * @param int $userId
+     * @param string $identifier
+     * @param string $identifierValue
      * @return int
      */
-    public function generateOTP($userId): int
+    public function generateOTP(string $identifier, $identifierValue): int
     {
+        OtpIdentifier::in($identifier);
+
+        // format phone before cache
+        if($identifier === "phone")
+            $identifierValue = phone($identifierValue)->formatE164();
+
         // Generate random 6 digits otp
         $otp = rand(100000, 999999);
-        $otpKey = "otp:$userId";
+        $otpKey = "otp:$identifierValue";
 
         // Save otp in cache with ttl/expiry
         Cache::put($otpKey, $otp, now()->addMinutes(self::OTP_CACHE_TTL));
 
         // Otp resend limiter
         $resendCooldown = self::RESEND_COOL_DOWN;
-        $resendLimiterKey = "otp-resend:$userId";
+        $resendLimiterKey = "otp-resend:$identifierValue";
         
         Cache::put($resendLimiterKey, true, $resendCooldown);
 

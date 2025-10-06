@@ -7,25 +7,28 @@ interface OtpService
     /**
      * Verify OTP.
      *
-     * @param int $user_id
+     * @param string $identifier
+     * @param string $identifierValue
      * @param int $otp
      * @return string
      */
-    public function verify(int $user_id, int $otp): string;
+    public function verify(string $identifier, $identifierValue, int $otp): string;
 
     /**
      * Resend OTP.
      *
-     * @param int $userId
+     * @param string $identifier
+     * @param string $identifierValue
      * @return int $otp
      */
-    public function resend(int $userId): int;
+    public function resend(string $identifier, $identifierValue): int;
 
     /**
      * Generate OTP and save in caches.
      *
-     * @param int $userId
+     * @param string $identifier
+     * @param string $identifierValue
      * @return int
      */
-    public function generateOTP($userId): int;
+    public function generateOTP(string $identifier, $identifierValue): int;
 }

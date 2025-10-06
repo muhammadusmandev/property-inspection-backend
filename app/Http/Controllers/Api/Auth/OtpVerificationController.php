@@ -35,7 +35,11 @@ class OtpVerificationController extends Controller
     {
         try {
             $validData = $request->validated();
-            $status = $this->otpService->verify($validData['user_id'], $validData['otp']);
+            $status = $this->otpService->verify(
+                $validData['identifier'], 
+                $validData[$validData['identifier']],
+                $validData['otp']
+            );
 
             $message = match($status) {
                 'verified' => 'OTP verified successfully.',
@@ -68,7 +72,10 @@ class OtpVerificationController extends Controller
     {
         try {
             $validData = $request->validated();
-            $otp = $this->otpService->resend($validData['user_id']);
+            $otp = $this->otpService->resend(
+                $validData['identifier'], 
+                $validData[$validData['identifier']]
+            );
 
             return $this->successResponse('OTP resend successfully.', ['otp' => $otp]);
 

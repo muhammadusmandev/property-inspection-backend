@@ -29,5 +29,8 @@ return [
     'otp' => [
         'digits' => 'Otp must be :digits long.',
     ],
+    'identifier' => [
+        'in' => 'Identifier type is invalid.',
+    ],
     'wrong_credentials' => 'The provided credentials are incorrect.'
 ];

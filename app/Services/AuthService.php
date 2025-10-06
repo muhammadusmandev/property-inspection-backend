@@ -66,7 +66,7 @@ class AuthService implements AuthServiceContract
     public function registerUser(array $userDetails): ?UserRegisterResource
     {
         $user = $this->authRepository->createUser($userDetails);
-        $otp = $this->otpService->generateOTP($user->id);
+        $otp = $this->otpService->generateOTP('email', $user->email); // (identifier, identifier value)
 
         return new UserRegisterResource($user, $otp);
     }
