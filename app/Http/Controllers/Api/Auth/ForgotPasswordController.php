@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\Api\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Password;
+use App\Services\Contracts\ForgotPasswordService as ForgotPasswordServiceContract;
+use App\Services\Contracts\OtpService as OtpServiceContract;
+use App\Requests\{RequestForgotPasswordRequest, ResetPasswordRequest};
+use App\Traits\{ Loggable, ApiJsonResponse };
+
+class ForgotPasswordController extends Controller
+{
+    use Loggable, ApiJsonResponse;
+
+    protected $forgotPasswordService;
+    protected $otpService;
+
+    /**
+     * Inject ForgotPasswordServiceContract, OtpServiceContract via constructor.
+     * @param \App\Services\Contracts\ForgotPasswordService $forgotPasswordService
+     * @param \App\Services\Contracts\OtpServiceContract $otpService
+    */
+    public function __construct(
+        ForgotPasswordServiceContract $forgotPasswordService, 
+        OtpServiceContract $otpService
+    )
+    {
+        $this->forgotPasswordService = $forgotPasswordService;
+        $this->otpService = $otpService;
+    }
+
+    /**
+     * Handle forgot password request.
+     * @param \App\Http\Requests\RequestForgotPasswordRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function request(RequestForgotPasswordRequest $request): JsonResponse
+    {
+        try {
+            $validData = $request->validated();
+            $otp = $this->otpService->generateOTP(
+                'email', 
+                $validData['email']
+            );
+
+            $enableEmailResetLink = false;  // true if want to send email with reset link
+
+            if($enableEmailResetLink){
+                $status = Password::sendResetLink(['email' => $validData['email']]);
+
+                if($status !== Password::RESET_LINK_SENT){
+                    // status will be 1. Password::INVALID_USER 2. Password::RESET_THROTTLED
+                    return $this->errorResponse('Oops! Something went wrong.', [
+                        'error' => __($status)
+                    ], 400);
+                }
+
+                $responseMsg = 'Reset link and OTP sent to your email successfully.';
+            }
+
+            return $this->successResponse($responseMsg ?? 'OTP sent successfully.', [
+                'otp' => $otp
+            ]);
+
+        } catch (\Exception $e) {
+            $this->logException($e, 'Forgot password request API request failed');
+
+            return $this->errorResponse('Oops! Something went wrong.', [
+                'error' => $e->getMessage()
+            ], 500);
+            
+        }
+    }
+
+    /**
+     * Handle reset password.
+     * @param \App\Http\Requests\ResetPasswordRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        try {
+            $validData = $request->validated();
+            $this->forgotPasswordService->resetPassword(
+                $validData['email'],
+                $validData['password']
+            );
+
+            return $this->successResponse('Password changed successfully.');
+
+        } catch (\Exception $e) {
+            $this->logException($e, 'Password reset API request failed');
+
+            return $this->errorResponse('Oops! Something went wrong.', [
+                'error' => $e->getMessage()
+            ], 500);
+            
+        }
+    }
+}

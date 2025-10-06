@@ -4,7 +4,7 @@ return [
     'email' => [
         'exists' => 'Your email doesn\'t exist.',
         'unique' => 'Already have an account on this email.',
-        'email_verified' => 'Already have an account on this email.'
+        'email_verified' => 'Your account is not email verified yet.'
     ],
     'phone_number' => [
         'phone' => 'Please enter a valid phone number.',
