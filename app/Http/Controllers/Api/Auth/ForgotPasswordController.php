@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Services\Contracts\ForgotPasswordService as ForgotPasswordServiceContract;
 use App\Services\Contracts\OtpService as OtpServiceContract;
 use App\Requests\{RequestForgotPasswordRequest, ResetPasswordRequest};
@@ -83,6 +84,7 @@ class ForgotPasswordController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      * 
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Exception unexpected error
      */
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
@@ -91,10 +93,16 @@ class ForgotPasswordController extends Controller
             $validData = $request->validated();
             $this->forgotPasswordService->resetPassword(
                 $validData['email'],
-                $validData['password']
+                $validData['password'],
+                $validData['otp_session_token']
             );
 
             return $this->successResponse('Password changed successfully.');
+
+        } catch (AuthorizationException $e) {
+            return $this->errorResponse('Oops! Something went wrong.',[
+                'error' => $e->getMessage()
+            ], 403);
 
         } catch (\Exception $e) {
             $this->logException($e, 'Password reset API request failed');

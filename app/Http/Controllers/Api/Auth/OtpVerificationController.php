@@ -35,20 +35,23 @@ class OtpVerificationController extends Controller
     {
         try {
             $validData = $request->validated();
-            $status = $this->otpService->verify(
+            $verificationData = $this->otpService->verify(
                 $validData['identifier'], 
                 $validData[$validData['identifier']],
                 $validData['otp']
             );
 
-            $message = match($status) {
+            $message = match($verificationData['status']) {
                 'verified' => 'OTP verified successfully.',
                 'invalid' => 'OTP is Invalid.',
                 'expired' => 'OTP Expired. Try to resend again.',
                 default => 'Unknown status',
             };
 
-            return $this->successResponse($message, ['status' => $status]);
+            return $this->successResponse($message, [
+                'status' => $verificationData['status'], 
+                'otp_session_token' => $verificationData['otpSessionToken']
+            ]);
 
         } catch (\Exception $e) {
             $this->logException($e, 'OTP Verification API request failed');

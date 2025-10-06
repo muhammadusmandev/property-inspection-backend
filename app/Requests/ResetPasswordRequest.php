@@ -37,8 +37,11 @@ class ResetPasswordRequest extends FormRequest
                 'min:8',
                 'max:60',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/'   // must one one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&#)
-
             ],
+            'otp_session_token' => [
+                'required', 
+                'uuid'
+            ]
         ];
     }
 

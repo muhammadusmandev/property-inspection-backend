@@ -28,9 +28,9 @@ class OtpService implements OtpServiceContract
      * @param string $identifier
      * @param string $identifierValue
      * @param int $otp
-     * @return string
+     * @return array
      */
-    public function verify(string $identifier, $identifierValue, int $otp): string
+    public function verify(string $identifier, $identifierValue, int $otp): array
     {
         OtpIdentifier::in($identifier);
         
@@ -45,7 +45,12 @@ class OtpService implements OtpServiceContract
             if (Cache::get($otpKey) === $otp) {
                 Cache::forget($otpKey);
                 // Todo: additional logic if email/phone verified
+
                 $status = 'verified';
+
+                // Cache temporary otp verification token (Useful in next api calls e.g. reset password api)
+                $otpSessionToken = \Str::uuid()->toString();
+                Cache::put("otp-verified:{$identifierValue}", $otpSessionToken, now()->addMinutes(self::OTP_CACHE_TTL));
             } else{
                 $status = 'invalid';
             }
@@ -53,7 +58,7 @@ class OtpService implements OtpServiceContract
             $status = 'expired';
         }
 
-        return $status;
+        return ['status' => $status, 'otpSessionToken' => $otpSessionToken ?? null];
     }
 
     /**

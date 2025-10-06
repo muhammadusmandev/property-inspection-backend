@@ -28,6 +28,7 @@ return [
     ],
     'otp' => [
         'digits' => 'Otp must be :digits long.',
+        'token_expired_invalid' => 'OTP verification session expired or invalid. Try again.'
     ],
     'identifier' => [
         'in' => 'Identifier type is invalid.',
