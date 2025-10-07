@@ -4,7 +4,7 @@ return [
     'email' => [
         'exists' => 'Your email doesn\'t exist.',
         'unique' => 'Already have an account on this email.',
-        'email_verified' => 'Your account is not email verified yet.'
+        'email_verified' => 'Your are not email verified.'
     ],
     'phone_number' => [
         'phone' => 'Please enter a valid phone number.',
@@ -33,5 +33,6 @@ return [
     'identifier' => [
         'in' => 'Identifier type is invalid.',
     ],
-    'wrong_credentials' => 'The provided credentials are incorrect.'
+    'wrong_credentials' => 'The provided credentials are incorrect.',
+    'inactive_account' => 'Your account is inactive. Contact support for further details.'
 ];

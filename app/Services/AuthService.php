@@ -6,11 +6,9 @@ use App\Services\Contracts\AuthService as AuthServiceContract;
 use App\Repositories\Contracts\AuthRepository as AuthRepositoryContract;
 use App\Services\Contracts\OtpService as OtpServiceContract;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use App\Resources\{ UserLoginResource, UserRegisterResource };
-use App\Policies\AuthPolicy;
 use Carbon\Carbon;
 use App\Models\User;
 
@@ -36,7 +34,6 @@ class AuthService implements AuthServiceContract
      * @return \Illuminate\Http\JsonResponse|UserLoginResource|null
      * 
      * @throws \Illuminate\Auth\AuthenticationException on authentication failure
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
 
     public function loginUser(array $credentials): ?UserLoginResource
@@ -47,9 +44,7 @@ class AuthService implements AuthServiceContract
             throw new AuthenticationException(__('validationMessages.wrong_credentials'));
         }
 
-        if (!(new AuthPolicy)->userLogin($user)) {
-            throw new AuthorizationException(__('validationMessages.email.email_verified'));
-        }
+        Gate::forUser($user)->authorize('allow-login'); // check active, email verified etc.
 
         $token = $this->authRepository->createToken($user);
 

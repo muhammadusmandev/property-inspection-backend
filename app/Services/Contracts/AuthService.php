@@ -7,10 +7,12 @@ use App\Resources\{ UserLoginResource, UserRegisterResource };
 interface AuthService
 {
     /**
-     * Login user with credentials.
+     * Attempt to login a user with credentials.
      *
      * @param array $credentials
      * @return \Illuminate\Http\JsonResponse|UserLoginResource|null
+     * 
+     * @throws \Illuminate\Auth\AuthenticationException on authentication failure
      */
     public function loginUser(array $credentials): ?UserLoginResource;
 

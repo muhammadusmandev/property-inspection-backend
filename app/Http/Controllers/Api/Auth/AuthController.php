@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use App\Services\Contracts\AuthService as AuthServiceContract;
+use App\Exceptions\LoginPreconditionException;
 use App\Requests\{LoginRequest, RegisterRequest};
 use App\Traits\{ Loggable, ApiJsonResponse };
 
@@ -49,9 +50,10 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 401);
 
-        } catch (AuthorizationException $e) {
+        } catch (LoginPreconditionException $e) {
             return $this->errorResponse('Oops! Something went wrong.',[
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'flag' => $e->flag,
             ], 403);
 
         } catch (\Exception $e) {
