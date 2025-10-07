@@ -54,9 +54,9 @@ class OtpVerificationController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            $this->logException($e, 'OTP Verification API request failed');
+            $this->logException($e, __('validationMessages.otp_verification_api_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             
@@ -85,7 +85,7 @@ class OtpVerificationController extends Controller
         } catch (\Exception $e) {
             $this->logException($e, 'OTP resend API request failed');
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             

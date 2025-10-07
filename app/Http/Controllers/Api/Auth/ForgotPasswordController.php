@@ -56,22 +56,22 @@ class ForgotPasswordController extends Controller
 
                 if($status !== Password::RESET_LINK_SENT){
                     // status will be 1. Password::INVALID_USER 2. Password::RESET_THROTTLED
-                    return $this->errorResponse('Oops! Something went wrong.', [
+                    return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                         'error' => __($status)
                     ], 400);
                 }
 
-                $responseMsg = 'Reset link and OTP sent to your email successfully.';
+                $responseMsg = __('validationMessages.reset_link_sent_successfully');
             }
 
-            return $this->successResponse($responseMsg ?? 'OTP sent successfully.', [
+            return $this->successResponse($responseMsg ?? __('validationMessages.otp_sent_successfully'), [
                 'otp' => $otp
             ]);
 
         } catch (\Exception $e) {
-            $this->logException($e, 'Forgot password request API request failed');
+            $this->logException($e, __('validationMessages.forget_password_api_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             
@@ -97,17 +97,17 @@ class ForgotPasswordController extends Controller
                 $validData['otp_session_token']
             );
 
-            return $this->successResponse('Password changed successfully.');
+            return $this->successResponse(__('validationMessages.passwsord_change_successfully'));
 
         } catch (AuthorizationException $e) {
-            return $this->errorResponse('Oops! Something went wrong.',[
+            return $this->errorResponse(__('validationMessages.something_went_wrong'),[
                 'error' => $e->getMessage()
             ], 403);
 
         } catch (\Exception $e) {
-            $this->logException($e, 'Password reset API request failed');
+            $this->logException($e, __('validationMessages.otp_resend_api_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             

@@ -43,23 +43,23 @@ class AuthController extends Controller
             $validData = $request->validated();
             $data = $this->authService->loginUser($validData);
 
-            return $this->successResponse('Great! User login successfully.', $data);
+            return $this->successResponse(__('validationMessages.login_successfully'), $data);
 
         } catch (AuthenticationException $e) {
-            return $this->errorResponse('Oops! Something went wrong.',[
+            return $this->errorResponse(__('validationMessages.something_went_wrong'),[
                 'error' => $e->getMessage()
             ], 401);
 
         } catch (LoginPreconditionException $e) {
-            return $this->errorResponse('Oops! Something went wrong.',[
+            return $this->errorResponse(__('validationMessages.something_went_wrong'),[
                 'error' => $e->getMessage(),
                 'flag' => $e->flag,
             ], 403);
 
         } catch (\Exception $e) {
-            $this->logException($e, 'Login API request failed');
+            $this->logException($e, __('validationMessages.login_api_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             
@@ -80,18 +80,18 @@ class AuthController extends Controller
             $validData = $request->validated();
             $data = $this->authService->registerUser($validData);
 
-            return $this->successResponse('Great! User register successfully.', $data);
+            return $this->successResponse(__('validationMessages.user_registered_successfully'), $data);
 
         } catch (QueryException $qe) {
-            $this->logException($qe, 'Oops! Something went wrong while saving your data. Please try again.');
+            $this->logException($qe, __('validationMessages.data_saved_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
-                'error' => 'Oops! Something went wrong while saving your data. Please try again.'
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => __('validationMessages.data_saved_failed')
             ], 500);
         } catch (\Exception $e) {
-            $this->logException($e, 'Register API request failed');
+            $this->logException($e, __('validationMessages.register_api_request_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             
@@ -111,12 +111,12 @@ class AuthController extends Controller
             $logoutFromDevices = filter_var(request()->query('logout_from_devices', false), FILTER_VALIDATE_BOOLEAN);
             $this->authService->logoutUser($logoutFromDevices);
 
-            return $this->successResponse('User logout successfully.');
+            return $this->successResponse(__('validationMessages.user_logout_successfully'));
 
         } catch (\Exception $e) {
-            $this->logException($e, 'Logout API request failed');
+            $this->logException($e, __('validationMessages.logout_api_failed'));
 
-            return $this->errorResponse('Oops! Something went wrong.', [
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage()
             ], 500);
             
