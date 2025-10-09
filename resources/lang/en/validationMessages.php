@@ -49,4 +49,5 @@ return [
     'passwsord_change_successfully' => 'Password changed successfully.',
     'reset_link_sent_successfully' => 'Reset link and OTP sent to your email successfully.',
     'otp_sent_successfully' => 'OTP sent successfully.',
+    'request_limit_exceeded' => "Request limit exceeded. Please try again after :retryTime.",
 ];
