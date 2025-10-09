@@ -7,12 +7,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserLoginResource extends JsonResource
 {
-    protected string $token;
+    protected array $token;
 
-    public function __construct($resource, string $token)
+    public function __construct($resource, array $tokenData)
     {
         parent::__construct($resource);
-        $this->token = $token;
+        $this->tokenData = $tokenData;
     }
 
     /**
@@ -23,8 +23,11 @@ class UserLoginResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'token' => $this->token,
-            'token_type' => 'Bearer',
+            'token' => [
+                'text' => $this->tokenData['token'],
+                'type' => 'Bearer',
+                'expires_at' => $this->tokenData['expires_at'],
+            ],
             'user' => [
                 'id' => $this->id,
                 'name' => $this->name,

@@ -46,9 +46,9 @@ class AuthService implements AuthServiceContract
 
         Gate::forUser($user)->authorize('allow-login'); // check active, email verified etc.
 
-        $token = $this->authRepository->createToken($user);
+        $tokenData = $this->authRepository->createToken($user);
 
-        return new UserLoginResource($user, $token);
+        return new UserLoginResource($user, $tokenData);
     }
 
     /**

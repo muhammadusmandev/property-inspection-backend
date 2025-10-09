@@ -17,9 +17,9 @@ interface AuthRepository
      * Create Api Token
      *
      * @param User $user
-     * @return string
+     * @return array
      */
-    public function createToken(User $user): string;
+    public function createToken(User $user): array;
 
      /**
      * Create new user

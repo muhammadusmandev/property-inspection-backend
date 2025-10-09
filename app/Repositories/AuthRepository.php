@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Exception;
 use App\Models\User;
+use Carbon\Carbon;
 
 class AuthRepository implements AuthRepositoryContract
 {
@@ -32,11 +33,16 @@ class AuthRepository implements AuthRepositoryContract
      * Create Api Token
      *
      * @param User $user
-     * @return string
+     * @return array
      */
-    public function createToken($user): string
+    public function createToken($user): array
     {
-        return $user->createToken('api_token')->plainTextToken;
+        // Todo: Handle proper DB query
+        $token = $user->createToken('api_token');
+        $token->accessToken->expires_at = Carbon::now()->addMinutes(config('sanctum.expiration'));
+        $token->accessToken->save();
+        
+        return ['token' => $token->plainTextToken, 'expires_at' => $token->accessToken->expires_at?->toIso8601String()];
     }
 
     /**
