@@ -12,7 +12,8 @@ return [
     'password' => [
         'min' => 'Password must be at least :character characters.',
         'max' => 'Password must be under :character characters.',
-        'regex' => 'Password must be mix (uppercase, lowercase, number, and special character).'
+        'regex' => 'Password must be mix (uppercase, lowercase, number, and special character).',
+        'must_new' => 'Please choose a password you haven\'t used before'
     ],
     'gender' => [
         'in' => 'Gender should be male, female or other.',

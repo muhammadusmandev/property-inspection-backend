@@ -5,6 +5,8 @@ namespace App\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Rules\PasswordIsNew;
+use App\Models\User;
 
 class ResetPasswordRequest extends FormRequest
 {
@@ -36,7 +38,8 @@ class ResetPasswordRequest extends FormRequest
                 'string',
                 'min:8',
                 'max:60',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/'   // must one one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&#)
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/',   // must one one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&#)
+                new PasswordIsNew($this->getResetUser()),
             ],
             'otp_session_token' => [
                 'required', 
@@ -76,5 +79,10 @@ class ResetPasswordRequest extends FormRequest
                 'errors' => $validator->errors(),
             ], 422)
         );
+    }
+
+    protected function getResetUser(): ?User
+    {
+        return User::where('email', $this->input('email'))->firstOrFail();
     }
 }
