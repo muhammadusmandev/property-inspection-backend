@@ -58,7 +58,7 @@ class AuthRepository implements AuthRepositoryContract
     {
         try {
             return DB::transaction(function () use ($userDetails) {
-                return User::create([
+                $user =  User::create([
                     'name' => $userDetails['first_name'] . ' ' . $userDetails['last_name'],
                     'email' => $userDetails['email'],
                     'password' => Hash::make($userDetails['password']),
@@ -66,8 +66,11 @@ class AuthRepository implements AuthRepositoryContract
                     'profile_photo' => $userDetails['profile_photo'] ?? null,
                     'gender' => $userDetails['gender'],
                     'date_of_birth' => $userDetails['date_of_birth'],
-                    'role' => $userDetails['role'] ?? 'realtor'
                 ]);
+
+                $user->assignRole('realtor');
+
+                return $user;
             });
         } catch (QueryException $qe) {
             throw $qe;

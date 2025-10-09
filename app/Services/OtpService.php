@@ -44,10 +44,11 @@ class OtpService implements OtpServiceContract
         if (Cache::has($otpKey)) {
             if (Cache::get($otpKey) === $otp) {
                 Cache::forget($otpKey);
-                // Todo: additional logic if email/phone verified
-
                 $status = 'verified';
 
+                // Todo: additional logic if email/phone verified
+                User::where($identifier, $identifierValue)->update(['email_verified_at' => now()]);
+                
                 // Cache temporary otp verification token (Useful in next api calls e.g. reset password api)
                 $otpSessionToken = \Str::uuid()->toString();
                 Cache::put("otp-verified:{$identifierValue}", $otpSessionToken, now()->addMinutes(self::OTP_CACHE_TTL));

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female', 'other'])->nullable()->after('profile_photo');
             $table->date('date_of_birth')->nullable()->after('gender');
             $table->text('bio')->nullable()->after('profile_photo');
-            $table->string('role')->default('customer')->after('bio');
             $table->boolean('is_active')->default(true)->after('password');
             $table->timestamp('last_login_at')->nullable()->after('is_active');
         });
@@ -37,7 +36,6 @@ return new class extends Migration
                 'gender',
                 'date_of_birth',
                 'bio',
-                'role',
                 'is_active',
                 'last_login_at',
             ]);

@@ -32,7 +32,7 @@ class UserLoginResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'email' => $this->email,
-                'roles' => ['realtor'],     // Todo: Need to show user roles if multiple
+                'roles' => $this->getRoleNames(),
                 'avatar_url' => $this->avatar_url ?? null,
             ],
         ];
