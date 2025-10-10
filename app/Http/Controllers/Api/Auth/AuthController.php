@@ -50,6 +50,11 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 401);
 
+        } catch (AuthorizationException $e) {
+            return $this->errorResponse(__('validationMessages.something_went_wrong'),[
+                'error' => $e->getMessage()
+            ], 403);
+
         } catch (LoginPreconditionException $e) {
             return $this->errorResponse(__('validationMessages.something_went_wrong'),[
                 'error' => $e->getMessage(),

@@ -7,13 +7,12 @@ use App\Models\User;
 class AuthPolicy
 {
     /**
-     * Check if user allowed to login
-     *
+     * Allowed roles for login.
      * @param App\Models\User $user
      * @return bool
      */
-    public function userLogin(User $user): bool
+    public function allowedRoles(User $user): bool
     {
-        return $user->hasVerifiedEmail();
+        return !empty(array_intersect($user->getRoleNames()->toArray(), ['realtor']));
     }
 }

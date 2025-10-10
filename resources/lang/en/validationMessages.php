@@ -35,6 +35,7 @@ return [
         'in' => 'Identifier type is invalid.',
     ],
     'wrong_credentials' => 'The provided credentials are incorrect.',
+    'not_allowed_role' => 'Access denied. You cannot log in.',
     'inactive_account' => 'Your account is inactive. Contact support for further details.',
     'something_went_wrong' => 'Oops! Something went wrong.',
     'otp_verification_api_failed' => 'OTP Verification API request failed.',

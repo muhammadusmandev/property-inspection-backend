@@ -6,9 +6,11 @@ use App\Services\Contracts\AuthService as AuthServiceContract;
 use App\Repositories\Contracts\AuthRepository as AuthRepositoryContract;
 use App\Services\Contracts\OtpService as OtpServiceContract;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use App\Resources\{ UserLoginResource, UserRegisterResource };
+use App\Policies\AuthPolicy;
 use Carbon\Carbon;
 use App\Models\User;
 
@@ -45,6 +47,10 @@ class AuthService implements AuthServiceContract
         }
 
         Gate::forUser($user)->authorize('allow-login'); // check active, email verified etc.
+
+        if (!(new AuthPolicy)->allowedRoles($user)) {
+            throw new AuthorizationException(__('validationMessages.not_allowed_role'));
+        }
 
         $tokenData = $this->authRepository->createToken($user);
 
