@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Property extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'branch_id',
+        'name',
+        'address',
+        'city',
+        'state',
+        'country',
+        'postal_code',
+        'type',
+        'active',
+    ];
+
+    /**
+     * property belongs to a user (realtor).
+     */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * property may belong to a branch.
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    /**
+     * property can have many rooms.
+     */
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+}

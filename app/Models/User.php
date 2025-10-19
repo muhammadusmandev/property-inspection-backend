@@ -97,4 +97,20 @@ class User extends Authenticatable
         $parts = explode(' ', $this->name);
         return isset($parts[1]) ? $parts[1] : null;
     }
+
+    /**
+     * Realtor may have many branches of the property.
+     */
+    public function branches()
+    {
+        return $this->hasMany(Branch::class);
+    }
+
+     /**
+     * Realtor has many properties.
+     */
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
 }
