@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Repositories\Contracts;
+use App\Models\User;
+
+interface AuthRepository
+{
+    /**
+     * Attempt to login with credentials.
+     *
+     * @param array $credentials
+     * @return User $user|null
+     */
+    public function attemptLogin(array $credentials): ?User;
+
+    /**
+     * Create Api Token
+     *
+     * @param User $user
+     * @return array
+     */
+    public function createToken(User $user): array;
+
+     /**
+     * Create new user
+     *
+     * @param array $userDetails
+     * @return User $user
+     */
+    public function createUser(array $userDetails): User;
+
+    /**
+     * Revoke current user token/tokens
+     *
+     * @param bool $logoutFromDevices Optional
+     * @return void
+     */
+    public function revokeToken(bool $logoutFromDevices = false): void;
+}
