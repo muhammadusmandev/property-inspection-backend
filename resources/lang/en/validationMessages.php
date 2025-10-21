@@ -52,4 +52,14 @@ return [
     'reset_link_sent_successfully' => 'Reset link and OTP sent to your email successfully.',
     'otp_sent_successfully' => 'OTP sent successfully.',
     'request_limit_exceeded' => "Request limit exceeded. Please try again after :retryTime.",
+    'properties' => [
+        'type_invalid' => 'Property type must be residential or commercial'
+    ],
+    'branch' => [
+        'exists' => 'Branch not found.'
+    ],
+    'client' => [
+        'exists' => 'Client not found'
+    ],
+    'data_fetch_success' => 'Data fetched successfully.'
 ];

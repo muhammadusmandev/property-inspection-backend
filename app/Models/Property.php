@@ -8,15 +8,20 @@ class Property extends Model
 {
     protected $fillable = [
         'user_id',
+        'client_id',
         'branch_id',
         'name',
         'address',
+        'address_2',
         'city',
         'state',
         'country',
         'postal_code',
         'type',
         'active',
+        'notes',
+        'description',
+        'reference'
     ];
 
     /**
@@ -42,5 +47,13 @@ class Property extends Model
     public function rooms()
     {
         return $this->hasMany(Room::class);
+    }
+
+     /**
+     * property may belong to a branch.
+     */
+    public function client()
+    {
+        return $this->belongsTo(User::class,'client_id');
     }
 }

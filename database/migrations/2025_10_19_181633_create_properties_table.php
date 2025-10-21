@@ -4,15 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('properties', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        Schema::create('properties', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('set null');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('client_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->text('address')->nullable();
             $table->string('city')->nullable();
@@ -20,7 +23,11 @@ return new class extends Migration {
             $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
             $table->enum('type', ['residential', 'commercial'])->default('residential');
+            $table->text('notes')->nullable();
+            $table->string('reference')->nullable();
+            $table->string('description')->nullable();
             $table->boolean('active')->default(true);
+            $table->timestamps();
         });
     }
 

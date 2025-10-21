@@ -10,7 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('branches', function (Blueprint $table) {
+        Schema::create('branches', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('code')->nullable();
@@ -19,6 +20,7 @@ return new class extends Migration {
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +30,5 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('branches');
-
     }
 };

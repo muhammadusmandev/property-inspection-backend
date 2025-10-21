@@ -33,7 +33,8 @@ class User extends Authenticatable
         'role',
         'password',
         'is_active',
-        'last_login_at'
+        'last_login_at',
+        'realtor_id',
     ];
 
     /**
@@ -106,11 +107,29 @@ class User extends Authenticatable
         return $this->hasMany(Branch::class);
     }
 
-     /**
+    /**
      * Realtor has many properties.
      */
     public function properties()
     {
         return $this->hasMany(Property::class);
+    }
+
+    /**
+     * Realtor has many clients.
+     */
+
+    public function clients()
+    {
+        return $this->hasMany(self::class, 'realtor_id');
+    }
+
+    /**
+     * Client belongs to realtor.
+     */
+
+    public function realtor()
+    {
+        return $this->belongsTo(self::class, 'realtor_id');
     }
 }
