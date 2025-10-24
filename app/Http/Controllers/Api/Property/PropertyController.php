@@ -30,7 +30,7 @@ class PropertyController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->propertyService->listProperties();
+            $data = $this->propertyService->listProperties()->response()->getData(true);
 
             return $this->successResponse(
                 __('validationMessages.property.list_success'),

@@ -38,11 +38,7 @@ Route::prefix('v1')->group(function () {
         });
         Route::apiResource('properties', PropertyController::class);
         Route::apiResource('branches', BranchController::class);
-        Route::get('/clients', [ClientController::class, 'index']);
-        Route::post('/', [ClientController::class, 'store']);
-        Route::get('{id}', [ClientController::class, 'show']);
-        Route::put('{id}', [ClientController::class, 'update']);
-        Route::delete('{id}', [ClientController::class, 'destroy']);
+        Route::apiResource('clients', ClientController::class);
     });
 
 });

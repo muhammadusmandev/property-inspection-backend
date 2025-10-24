@@ -23,8 +23,9 @@ class RateLimiterServiceProvider extends ServiceProvider
     {
         // Login (email + IP)
         RateLimiter::for('login', function (Request $request) {
-            $key = (string) strtolower($request->email).'|'.$request->ip();
-            return Limit::perHour(5)->by($key);
+            return Limit::perHour(5)->by(
+                'login|' . (string) strtolower($request->email) . ':' . $request->ip()
+            );
         });
 
         // Register (email + IP)
