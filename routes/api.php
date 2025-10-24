@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Branch\BranchController;
 use App\Http\Controllers\Api\Client\ClientController;
+use App\Http\Controllers\Api\Template\TemplateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -39,6 +40,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('properties', PropertyController::class);
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
+        Route::apiResource('templates', TemplateController::class);
     });
 
 });

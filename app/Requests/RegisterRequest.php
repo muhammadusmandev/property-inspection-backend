@@ -36,9 +36,9 @@ class RegisterRequest extends FormRequest
                 'max:100'
             ],
             'email' => [
-                'required', 
-                'email', 
-                'email:rfc,dns', 
+                'required',
+                'email',
+                'email:rfc,dns',
                 'max:200',
                 'unique:users,email'
             ],
@@ -46,35 +46,35 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'min:8',
-                'max:60', 
+                'max:60',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).+$/'   // must one one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&#)
             ],
             'phone_number' => [
-                'nullable', 
-                'string', 
+                'nullable',
+                'string',
                 'max:20',
                 'phone:AUTO'
             ],
             'profile_photo' => [
-                'nullable', 
-                'string', 
+                'nullable',
+                'string',
                 'max:255'
             ],
             'gender' => [
-                'required', 
+                'required',
                 'in:male,female,other'
             ],
             'date_of_birth' => [
-                'required', 
-                'date', 
-                'before:' . Carbon::now()->subYears(10)->format('Y')
+                'required',
+                'date',
+                'before:' . Carbon::now()->subYears(15)->format('Y')
             ],
             'role' => [
-                'nullable', 
-                'string', 
+                'nullable',
+                'string',
                 'in:realtor'
             ],
-            
+
         ];
     }
 
