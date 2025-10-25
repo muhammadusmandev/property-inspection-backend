@@ -27,6 +27,8 @@ class UpdatePropertyRequest extends FormRequest
             'postal_code' => 'nullable|string|max:20',
             'type'        => 'sometimes|in:residential,commercial',
             'active'      => 'boolean',
+            'reference'   => 'nullable|string|max:100',
+            'notes'   => 'nullable|string|max:500',
         ];
     }
 

@@ -24,7 +24,7 @@ class PropertyService implements PropertyServiceContract
      */
     public function listProperties(): AnonymousResourceCollection
     {
-        return $this->propertyRepository->getAllForUser(Auth::id(), request()->perPage);
+        return $this->propertyRepository->getAllForUser(Auth::id());
     }
 
     /**
