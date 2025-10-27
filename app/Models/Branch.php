@@ -8,8 +8,10 @@ class Branch extends Model
 {
     protected $fillable = [
         'user_id',
+        'associated_property_id',
         'name',
         'address',
+        'address_2',
         'city',
         'state',
         'country',
@@ -25,6 +27,6 @@ class Branch extends Model
 
     public function properties()
     {
-        return $this->hasMany(Property::class);
+        return $this->hasOne(Property::class, 'id', 'associated_property_id');
     }
 }
