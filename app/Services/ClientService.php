@@ -27,8 +27,6 @@ class ClientService implements ClientServiceContract
     public function createClient(array $data): User
     {
         $data['realtor_id'] = Auth::id();
-        $data['role'] = 'client';
-        $data['is_active'] = $data['is_active'] ?? true;
         return $this->clientRepository->create($data);
     }
 

@@ -6,6 +6,7 @@ return [
 
     'roles' => [
         'realtor' => 'realtor',
+        'client' => 'client',
         'admin' => 'admin',
     ],
 
@@ -15,6 +16,9 @@ return [
 
     'role_permissions' => [
         'admin' => [
+            'forget password',
+        ],
+        'client' => [
             'forget password',
         ],
         'realtor' => [

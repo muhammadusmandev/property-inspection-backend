@@ -24,7 +24,7 @@ class ClientController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->clientService->listClients();
+            $data = $this->clientService->listClients()->response()->getData(true);
             return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
         } catch (\Exception $e) {
             $this->logException($e);
