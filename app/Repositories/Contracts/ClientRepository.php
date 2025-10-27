@@ -12,4 +12,6 @@ interface ClientRepository
     public function create(array $data): User;
     public function update(User $client, array $data): User;
     public function delete(User $client): bool;
+    public function getClientProperties(int $clientId, int $perPage = 10): AnonymousResourceCollection;
+    public function associateProperty(array $data): bool;
 }

@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\{ User, Property };
 use App\Repositories\Contracts\ClientRepository as ClientRepositoryContract;
 use Illuminate\Support\Facades\Hash;
-use App\Resources\ClientResource;
+use App\Resources\{ ClientResource, PropertyResource };
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ClientRepository implements ClientRepositoryContract
@@ -79,5 +79,55 @@ class ClientRepository implements ClientRepositoryContract
     public function delete(User $client): bool
     {
         return $client->delete();
+    }
+
+    public function getClientProperties(int $clientId, int $perPage = 10): AnonymousResourceCollection
+    {
+        $columnQuery = request()->input('columnQuery');
+        $columnName = request()->input('columnName');
+
+        $query = Property::with('branch', 'rooms','client')
+            ->where('user_id', auth()->id())
+            ->where(function ($query) use ($clientId) {
+                $query->where('client_id', $clientId)
+                    ->orWhereNull('client_id');
+            })
+            ->latest();
+
+        if ($columnName && $columnQuery) {
+            if (str_contains($columnName, '.')) {      // search query on relation
+                [$relation, $column] = explode('.', $columnName);
+
+                $query->whereHas($relation, function ($q) use ($column, $columnQuery) {
+                    $q->where($column, 'LIKE', "%{$columnQuery}%");
+                });
+            } else {
+                $query->where($columnName, 'LIKE', "%{$columnQuery}%");
+            }
+        }
+
+        // Todo: make trait/helper for getting boolean from request safely
+        $paginate = filter_var(
+            is_string($v = request()->input('paginate', true)) ? trim($v, "\"'") : $v,
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_NULL_ON_FAILURE
+        ) ?? true;
+
+        if (!$paginate) {
+            $properties = $query->get();
+        } else{
+            $properties = $query->paginate(request()->input('perPage') ?? $perPage);
+        }
+
+        return PropertyResource::collection($properties);
+    }
+
+    public function associateProperty(array $data): bool
+    {
+        $updateStatus =  Property::find($data['property_id'])->update([
+            'client_id' => $data['associate_status'] === true ? $data['client_id'] : null
+        ]);
+
+        return $updateStatus;
     }
 }

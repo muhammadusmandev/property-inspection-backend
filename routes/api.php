@@ -41,6 +41,9 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
         Route::apiResource('templates', TemplateController::class);
+
+        Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
+        Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
     });
 
 });
