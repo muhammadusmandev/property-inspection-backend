@@ -61,5 +61,9 @@ return [
     'client' => [
         'exists' => 'Client not found'
     ],
-    'data_fetch_success' => 'Data fetched successfully.'
+    'property' => [
+        'exists' => 'Property not found'
+    ],
+    'data_fetch_success' => 'Data fetched successfully.',
+    'action_done_success' => 'Action done successfully.',
 ];

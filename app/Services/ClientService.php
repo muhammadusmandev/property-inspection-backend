@@ -74,4 +74,14 @@ class ClientService implements ClientServiceContract
 
         $this->clientRepository->delete($client);
     }
+
+    public function listClientProperties(int $clientId): AnonymousResourceCollection
+    {
+        return $this->clientRepository->getClientProperties($clientId);
+    }
+
+    public function associateProperty(array $data): bool
+    {
+        return $this->clientRepository->associateProperty($data);
+    }
 }
