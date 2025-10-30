@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\Branch\BranchController;
 use App\Http\Controllers\Api\Client\ClientController;
 use App\Http\Controllers\Api\Template\TemplateController;
+use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
+use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -41,6 +43,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
         Route::apiResource('templates', TemplateController::class);
+        Route::apiResource('inspection-areas', InspectionAreaController::class);
+        Route::apiResource('inspection-area-items', InspectionAreaItemController::class);
     });
 
 });
