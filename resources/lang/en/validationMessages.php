@@ -64,5 +64,10 @@ return [
     'data_fetch_success' => 'Data fetched successfully.',
     'inspection_areas_fetch_api_failed' => 'Inpsection areas list API request failed.',
     'resource_created_successfully' => 'Resource created successfully.',
-    'resource_create_failed' => ':resource created failed.'
+    'resource_create_failed' => ':resource created failed.',
+    'property' => [
+        'exists' => 'Property not found'
+    ],
+    'data_fetch_success' => 'Data fetched successfully.',
+    'action_done_success' => 'Action done successfully.',
 ];

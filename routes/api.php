@@ -45,6 +45,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('templates', TemplateController::class);
         Route::apiResource('inspection-areas', InspectionAreaController::class);
         Route::apiResource('inspection-area-items', InspectionAreaItemController::class);
+        Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
+        Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
     });
 
 });
