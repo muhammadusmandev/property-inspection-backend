@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_sections', function (Blueprint $table) {
+        Schema::create('template_inspection_areas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('template_id');
             $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
-            $table->string('name');
-            $table->integer('order')->default(0);
+            $table->unsignedBigInteger('inspection_area_id');
+            $table->foreign('inspection_area_id')->references('id')->on('inspection_areas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_sections');
+        Schema::dropIfExists('template_inspection_areas');
     }
 };

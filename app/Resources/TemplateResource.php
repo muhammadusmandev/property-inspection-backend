@@ -2,19 +2,25 @@
 
 namespace App\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Resources\InspectionAreaResource;
 
 class TemplateResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'is_public' => $this->is_public,
-            'created_by' => $this->created_by,
-            'sections' => TemplateSectionResource::collection($this->whenLoaded('sections')),
+            'is_default' => (bool) $this->is_default,
+            'realtor_id' => $this->realtor_id,
+            'areas' => InspectionAreaResource::collection($this->whenLoaded('areas')),
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Template;
+use App\Models\{Template, TemplateInspectionArea};
 use App\Repositories\Contracts\TemplateRepository;
 use App\Services\Contracts\TemplateService as TemplateServiceContract;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -27,24 +27,17 @@ class TemplateService implements TemplateServiceContract
     public function createTemplate(array $data): Template
     {
         return DB::transaction(function () use ($data) {
-            $data['created_by'] = Auth::id();
+            $data['realtor_id'] = Auth::id();
             $template = $this->templateRepository->create($data);
 
-            foreach ($data['sections'] ?? [] as $sectionData) {
-                $section = $template->sections()->create([
-                    'name' => $sectionData['name'],
-                    'order' => $sectionData['order'] ?? 0,
+            foreach ($data['areas'] as $area) {
+                $section = TemplateInspectionArea::create([
+                    'template_id' => $template->id,
+                    'inspection_area_id' => $area,
                 ]);
-
-                foreach ($sectionData['items'] ?? [] as $itemData) {
-                    $section->items()->create([
-                        'name' => $itemData['name'],
-                        'description' => $itemData['description'] ?? null,
-                    ]);
-                }
             }
 
-            return $template->load('sections.items');
+            return $template;
         });
     }
 
@@ -64,30 +57,21 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->created_by !== Auth::id()) {
+        if ($template->realtor_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
         return DB::transaction(function () use ($template, $data) {
             $this->templateRepository->update($template, $data);
 
-            $template->sections()->delete();
-
-            foreach ($data['sections'] ?? [] as $sectionData) {
-                $section = $template->sections()->create([
-                    'name' => $sectionData['name'],
-                    'order' => $sectionData['order'] ?? 0,
+            foreach ($data['areas'] as $area) {
+                $section = TemplateInspectionArea::updateOrCreate([
+                    'template_id' => $template->id,
+                    'inspection_area_id' => $area,
                 ]);
-
-                foreach ($sectionData['items'] ?? [] as $itemData) {
-                    $section->items()->create([
-                        'name' => $itemData['name'],
-                        'description' => $itemData['description'] ?? null,
-                    ]);
-                }
             }
 
-            return $template->load('sections.items');
+            return $template;
         });
     }
 
@@ -98,7 +82,7 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->created_by !== Auth::id()) {
+        if ($template->realtor_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 

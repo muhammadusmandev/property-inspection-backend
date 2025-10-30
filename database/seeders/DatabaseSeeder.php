@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(CountriesTableSeeder::class);
         $this->call(InspectionAreasItemsTableSeeder::class);
+        $this->call(TemplatesSeeder::class);     // must after InspectionAreasItemsTableSeeder
     }
 }
