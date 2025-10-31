@@ -49,7 +49,7 @@ class TemplateRepository implements \App\Repositories\Contracts\TemplateReposito
 
     public function findById(int $id): ?Template
     {
-        return Template::find($id);
+        return Template::with('areas')->where('id', $id)->first();
     }
 
     public function create(array $data): Template
@@ -65,6 +65,13 @@ class TemplateRepository implements \App\Repositories\Contracts\TemplateReposito
 
     public function delete(Template $template): bool
     {
+        $template->areas()->each(function ($area) {
+            $area->delete();
+        });
+
+        // detach pivot relationship
+        $template->areas()->detach();
+
         return $template->delete();
     }
 }

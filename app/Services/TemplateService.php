@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Resources\TemplateResource;
 use App\Models\{Template, TemplateInspectionArea};
 use App\Repositories\Contracts\TemplateRepository;
 use App\Services\Contracts\TemplateService as TemplateServiceContract;
@@ -41,13 +42,13 @@ class TemplateService implements TemplateServiceContract
         });
     }
 
-    public function showTemplate(int $id): Template
+    public function showTemplate(int $id): TemplateResource
     {
         $template = $this->templateRepository->findById($id);
         if (!$template) {
             throw new \Exception('Template not found.');
         }
-        return $template;
+        return new TemplateResource($template);
     }
 
     public function updateTemplate(int $id, array $data): Template
@@ -85,6 +86,14 @@ class TemplateService implements TemplateServiceContract
         if ($template->realtor_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
+
+        /** 
+         * Todo: uncomment when reports added
+         * $hasReports = $template->whereHas('reports')->exists();
+         *  if ($hasReports) {
+         *     throw new \Exception("Action forbidden. One or more reports using same template.");
+         *  }
+         **/
 
         $this->templateRepository->delete($template);
     }

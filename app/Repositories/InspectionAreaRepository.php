@@ -22,7 +22,8 @@ class InspectionAreaRepository implements \App\Repositories\Contracts\Inspection
         $query = InspectionArea::with('items')
             ->where('realtor_id', auth()->id())
             ->orWhere('is_default', true)
-            ->orderBy('is_default', 'ASC');
+            ->orderBy('is_default', 'ASC')
+            ->orderBy('created_at', 'DESC');
 
         if ($columnName && $columnQuery) {
             if (str_contains($columnName, '.')) {      // search query on relation
