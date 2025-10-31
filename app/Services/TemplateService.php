@@ -65,12 +65,7 @@ class TemplateService implements TemplateServiceContract
         return DB::transaction(function () use ($template, $data) {
             $this->templateRepository->update($template, $data);
 
-            foreach ($data['areas'] as $area) {
-                $section = TemplateInspectionArea::updateOrCreate([
-                    'template_id' => $template->id,
-                    'inspection_area_id' => $area,
-                ]);
-            }
+            $template->areas()->sync($data['areas']);
 
             return $template;
         });
