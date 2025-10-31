@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_items', function (Blueprint $table) {
+        Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('template_section_id');
-            $table->foreign('template_section_id')->references('id')->on('template_sections')->onDelete('cascade');
+            $table->unsignedBigInteger('realtor_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('is_default')->default(false);
+            $table->foreign('realtor_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_items');
+        Schema::dropIfExists('templates');
     }
 };

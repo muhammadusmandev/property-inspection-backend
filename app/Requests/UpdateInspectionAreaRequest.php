@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateTemplateRequest extends FormRequest
+class UpdateInspectionAreaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,18 @@ class UpdateTemplateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:150',
-            'areas' => 'required|array',
-            'areas.*' => 'integer',
+            'name' => [
+                'required', 
+                'string',
+                'max:150'
+            ],
+            'items' => [
+                'required',
+                'array'
+            ],
+            'items.*' => [
+                'integer'
+            ],
         ];
     }
 
@@ -39,10 +48,12 @@ class UpdateTemplateRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
-            'success' => false,
-            'message' => 'Validation failed.',
-            'errors'  => $validator->errors(),
-        ], 422));
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Oops! Validation Failed.',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
     }
 }

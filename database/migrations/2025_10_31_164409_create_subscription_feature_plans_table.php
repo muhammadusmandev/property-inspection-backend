@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('templates', function (Blueprint $table) {
+        Schema::create('subscription_feature_plans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('created_by');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->boolean('is_public')->default(false);
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('subscription_id')->constrained('subscription_plans')->cascadeOnDelete();
+            $table->foreignId('subscription_feature_id')->constrained('subscription_features')->cascadeOnDelete();
+            $table->string('value')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('templates');
+        Schema::dropIfExists('subscription_feature_plans');
     }
 };
