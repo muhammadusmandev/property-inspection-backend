@@ -92,4 +92,46 @@ class InspectionAreaRepository implements \App\Repositories\Contracts\Inspection
 
         return $area;
     }
+
+    /**
+     * Find inspection area.
+     *
+     * @param int $id
+     * @return \App\Models\InspectionArea $area
+     */
+    public function findById(int $id): ?InspectionArea
+    {
+        return InspectionArea::with('items')->where('id', $id)->first();
+    }
+
+    /**
+     * Update inspection area.
+     *
+     * @param InspectionArea $area
+     * @param array $data
+     * @return \App\Models\InspectionArea $area
+     */
+    public function update(InspectionArea $area, array $data): InspectionArea
+    {
+        $area->update($data);
+        return $area;
+    }
+
+    /**
+     * Delete inspection area.
+     *
+     * @param \App\Models\InspectionArea $area
+     * @return bool
+     */
+    public function delete(InspectionArea $area): bool
+    {
+        $area->items()->each(function ($item) {
+            $item->delete();
+        });
+
+        // detach pivot relationship
+        $area->items()->detach();
+
+        return $area->delete();
+    }
 }

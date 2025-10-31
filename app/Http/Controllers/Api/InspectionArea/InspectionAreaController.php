@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\InspectionArea;
 
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\InspectionAreaService;
-use App\Requests\{ AddInspectionAreaRequest };
+use App\Requests\{ AddInspectionAreaRequest, UpdateInspectionAreaRequest };
 use App\Traits\ApiJsonResponse;
 use App\Traits\Loggable;
 use Illuminate\Http\JsonResponse;
@@ -61,13 +61,26 @@ class InspectionAreaController extends Controller
         
     }
 
-    public function update(UpdateTemplateRequest $request, int $id): JsonResponse
+    public function update(UpdateInspectionAreaRequest $request, int $id): JsonResponse
     {
-        
+        try {
+            $data = $this->inspectionAreaService->updateInspectionArea($id, $request->validated());
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Inspection Area']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function destroy(int $id): JsonResponse
     {
-        
+        try {
+            $this->inspectionAreaService->deleteInspectionArea($id);
+            return $this->successResponse('Inspection area deleted successfully.');
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to delete inspection area.', ['error' => $e->getMessage()], 500);
+        }
     }
 }

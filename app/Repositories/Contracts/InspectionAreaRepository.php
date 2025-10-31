@@ -31,4 +31,29 @@ interface InspectionAreaRepository
      */
 
     public function addInspectionArea(array $data): InspectionArea;
+
+    /**
+     * Find inspection area.
+     *
+     * @param int $id
+     * @return \App\Models\InspectionArea $area
+     */
+    public function findById(int $id): ?InspectionArea;
+
+    /**
+     * Update inspection area.
+     *
+     * @param InspectionArea $area
+     * @param array $data
+     * @return \App\Models\InspectionArea $area
+     */
+    public function update(InspectionArea $area, array $data): InspectionArea;
+
+    /**
+     * Delete inspection area.
+     *
+     * @param \App\Models\InspectionArea $area
+     * @return bool
+     */
+    public function delete(InspectionArea $area): bool;
 }

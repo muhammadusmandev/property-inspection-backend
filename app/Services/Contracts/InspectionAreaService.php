@@ -30,4 +30,21 @@ interface InspectionAreaService
      * @return \App\Models\InspectionArea
      */
     public function addInspectionArea(array $data): InspectionArea;
+
+    /**
+     * Update inspection area.
+     *
+     * @param int $id
+     * @param array $data
+     * @return InspectionArea
+     */
+    public function updateInspectionArea(int $id, array $data): InspectionArea;
+
+    /**
+     * Delete inspection area.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function deleteInspectionArea(int $id): void;
 }
