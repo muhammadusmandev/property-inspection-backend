@@ -65,10 +65,6 @@ class TemplateRepository implements \App\Repositories\Contracts\TemplateReposito
 
     public function delete(Template $template): bool
     {
-        $template->areas()->each(function ($area) {
-            $area->delete();
-        });
-
         // detach pivot relationship
         $template->areas()->detach();
 

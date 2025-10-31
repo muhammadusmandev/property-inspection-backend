@@ -125,10 +125,6 @@ class InspectionAreaRepository implements \App\Repositories\Contracts\Inspection
      */
     public function delete(InspectionArea $area): bool
     {
-        $area->items()->each(function ($item) {
-            $item->delete();
-        });
-
         // detach pivot relationship
         $area->items()->detach();
 
