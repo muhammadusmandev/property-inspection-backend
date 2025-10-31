@@ -3,6 +3,7 @@
 namespace App\Services\Contracts;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Resources\InspectionAreaResource;
 use App\Models\InspectionArea;
 
 interface InspectionAreaService
@@ -30,6 +31,14 @@ interface InspectionAreaService
      * @return \App\Models\InspectionArea
      */
     public function addInspectionArea(array $data): InspectionArea;
+
+    /**
+     * Show inspection area.
+     *
+     * @param int $id
+     * @return \App\Resources\InspectionAreaResource
+     */
+    public function showInspectionArea(int $id): InspectionAreaResource;
 
     /**
      * Update inspection area.

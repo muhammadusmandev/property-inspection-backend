@@ -7,6 +7,7 @@ use App\Repositories\Contracts\InspectionAreaRepository as InspectionAreaReposit
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\{ InspectionArea, InspectionAreaItemPivot };
+use App\Resources\InspectionAreaResource;
 use DB;
 
 class InspectionAreaService implements InspectionAreaServiceContract
@@ -54,6 +55,21 @@ class InspectionAreaService implements InspectionAreaServiceContract
     public function addInspectionArea(array $data): InspectionArea
     {
         return $this->inspectionAreaRepository->addInspectionArea($data);
+    }
+
+    /**
+     * Show inspection area.
+     *
+     * @param int $id
+     * @return \App\Resources\InspectionAreaResource
+     */
+    public function showInspectionArea(int $id): InspectionAreaResource
+    {
+        $area = $this->inspectionAreaRepository->findById($id);
+        if (!$area) {
+            throw new \Exception('Area not found.');
+        }
+        return new InspectionAreaResource($area);
     }
 
     /**

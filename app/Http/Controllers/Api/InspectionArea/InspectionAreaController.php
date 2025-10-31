@@ -58,7 +58,12 @@ class InspectionAreaController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        
+        try {
+            $data = $this->inspectionAreaService->showInspectionArea($id);
+            return $this->successResponse('Inspection area retrieved successfully.', $data);
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to retrieve area.', ['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(UpdateInspectionAreaRequest $request, int $id): JsonResponse
