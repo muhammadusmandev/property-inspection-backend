@@ -24,10 +24,10 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
-            'notes' => 'nullable|string',
+            'title' => 'required|string|max:150',
             'property_id' => 'required|integer|exists:properties,id',
             'template_id' => 'required|integer|exists:templates,id',
+            'report_date' => 'required|date',
             'type' => 'required|in:check-in,check-out,inventory,inspection',
         ];
     }
