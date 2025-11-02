@@ -23,7 +23,7 @@ class BranchController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->branchService->listBranches();
+            $data = $this->branchService->listBranches()->response()->getData(true);
             return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
         } catch (\Exception $e) {
             $this->logException($e, __('validationMessages.something_went_wrong'));

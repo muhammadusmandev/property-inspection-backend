@@ -10,10 +10,37 @@ class BranchRepository implements BranchRepositoryContract
 {
     public function getAllForUser(int $userId, int $perPage = 10): AnonymousResourceCollection
     {
-        $branches = Branch::where('user_id', $userId)
+        $columnQuery = request()->input('columnQuery');
+        $columnName = request()->input('columnName');
+
+        $query = Branch::where('user_id', $userId)
             ->with('properties')
-            ->latest()
-            ->paginate($perPage);
+            ->latest();
+        
+        if ($columnName && $columnQuery) {
+            if (str_contains($columnName, '.')) {      // search query on relation
+                [$relation, $column] = explode('.', $columnName);
+
+                $query->whereHas($relation, function ($q) use ($column, $columnQuery) {
+                    $q->where($column, 'LIKE', "%{$columnQuery}%");
+                });
+            } else {
+                $query->where($columnName, 'LIKE', "%{$columnQuery}%");
+            }
+        }
+
+        // Todo: make trait/helper for getting boolean from request safely
+        $paginate = filter_var(
+            is_string($v = request()->input('paginate', true)) ? trim($v, "\"'") : $v,
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_NULL_ON_FAILURE
+        ) ?? true;
+
+        if (!$paginate) {
+            $branches = $query->get();
+        } else{
+            $branches = $query->paginate(request()->input('perPage') ?? $perPage);
+        }
 
         return BranchResource::collection($branches);
     }

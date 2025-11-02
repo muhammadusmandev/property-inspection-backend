@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Database\QueryException;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Services\Contracts\ClientService as ClientServiceContract;
-use App\Requests\{ StoreClientRequest, UpdateClientRequest };
+use App\Requests\{ StoreClientRequest, UpdateClientRequest, AssociatePropertyRequest };
 use App\Traits\{ Loggable, ApiJsonResponse };
 
 class ClientController extends Controller
@@ -24,7 +24,7 @@ class ClientController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->clientService->listClients();
+            $data = $this->clientService->listClients()->response()->getData(true);
             return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
         } catch (\Exception $e) {
             $this->logException($e);
@@ -36,7 +36,7 @@ class ClientController extends Controller
     {
         try {
             $data = $this->clientService->createClient($request->validated());
-            return $this->successResponse(__('validationMessages.client.created_successfully'), $data, 201);
+            return $this->successResponse(__('validationMessages.client.created_successfully'), $data, 20);
         } catch (QueryException $qe) {
             $this->logException($qe);
             return $this->errorResponse(__('validationMessages.data_saved_failed'), ['error' => $qe->getMessage()]);
@@ -83,6 +83,44 @@ class ClientController extends Controller
         } catch (\Exception $e) {
             $this->logException($e);
             return $this->errorResponse(__('validationMessages.client.delete_failed'), ['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Get client properties.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function clientProperties(int $id): JsonResponse
+    {
+        try {
+            $data = $this->clientService->listClientProperties($id)->response()->getData(true);
+            return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e);
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), ['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Handle associate and unassociate property to client.
+     *
+     * @param  \App\Http\Requests\AssociatePropertyRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function associateProperty(AssociatePropertyRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->clientService->associateProperty($request->validated());
+            return $this->successResponse(__('validationMessages.action_done_success'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e);
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), ['error' => $e->getMessage()]);
         }
     }
 }

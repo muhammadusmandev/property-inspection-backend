@@ -61,5 +61,16 @@ return [
     'client' => [
         'exists' => 'Client not found'
     ],
-    'data_fetch_success' => 'Data fetched successfully.'
+    'data_fetch_success' => 'Data fetched successfully.',
+    'inspection_areas_fetch_api_failed' => 'Inpsection areas list API request failed.',
+    'resource_created_successfully' => 'Resource created successfully.',
+    'resource_updated_successfully' => 'Resource updated successfully.',
+    'resource_create_failed' => ':resource created failed.',
+    'resource_update_failed' => ':resource update failed.',
+    'resource_fetch_failed' => ':resource fetch failed.',
+    'property' => [
+        'exists' => 'Property not found'
+    ],
+    'data_fetch_success' => 'Data fetched successfully.',
+    'action_done_success' => 'Action done successfully.',
 ];

@@ -13,4 +13,6 @@ interface ClientService
     public function showClient(int $id): ClientResource;
     public function updateClient(int $id, array $data): User;
     public function deleteClient(int $id): void;
+    public function listClientProperties(int $clientId): AnonymousResourceCollection;
+    public function associateProperty(array $data): bool;
 }

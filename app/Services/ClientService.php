@@ -27,8 +27,6 @@ class ClientService implements ClientServiceContract
     public function createClient(array $data): User
     {
         $data['realtor_id'] = Auth::id();
-        $data['role'] = 'client';
-        $data['is_active'] = $data['is_active'] ?? true;
         return $this->clientRepository->create($data);
     }
 
@@ -75,5 +73,15 @@ class ClientService implements ClientServiceContract
         }
 
         $this->clientRepository->delete($client);
+    }
+
+    public function listClientProperties(int $clientId): AnonymousResourceCollection
+    {
+        return $this->clientRepository->getClientProperties($clientId);
+    }
+
+    public function associateProperty(array $data): bool
+    {
+        return $this->clientRepository->associateProperty($data);
     }
 }

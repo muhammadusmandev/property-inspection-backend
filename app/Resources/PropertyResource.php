@@ -27,6 +27,7 @@ class PropertyResource extends JsonResource
             'user_id' => $this->user_id,
             'branch' => $this?->branch,
             'rooms' => $this?->rooms,
+            'client_id' => $this->client_id,
             'client' => $this?->client,
             'address' => $this->address,
             'address_2' => $this->address_2 ?? null,
