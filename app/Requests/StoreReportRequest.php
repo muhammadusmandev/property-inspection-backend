@@ -3,6 +3,8 @@
 namespace App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class StoreReportRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StoreReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +27,24 @@ class StoreReportRequest extends FormRequest
             'title' => 'required|string',
             'notes' => 'nullable|string',
             'property_id' => 'required|integer|exists:properties,id',
-            'template_id' => 'requiredinteger|exists:templates,id',
+            'template_id' => 'required|integer|exists:templates,id',
             'type' => 'required|in:check-in,check-out,inventory,inspection',
         ];
+    }
+
+      /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @return void
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Validation failed.',
+            'errors'  => $validator->errors(),
+        ], 422));
     }
 }

@@ -10,4 +10,5 @@ interface ReportService
     public function listReports(): AnonymousResourceCollection;
 
     public function createReport(array $data): Report;
+    public function deleteReport(int $id);
 }

@@ -8,6 +8,7 @@ use App\Requests\UpdateReportRequest;
 use App\Traits\ApiJsonResponse;
 use App\Traits\Loggable;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Services\Contracts\ReportService as ReportServiceContract;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,16 +34,10 @@ class ReportController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->reportService->listreports();
-
-            return $this->successResponse(
-                __('validationMessages.property.list_success'),
-                $data
-            );
-
+            $data = $this->reportService->listReports()->response()->getData(true);
+            return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.property.list_failed'));
-
+            $this->logException($e, __('validationMessages.resource_fetch_failed', ['resource' => 'Inspection Area']));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);
@@ -54,26 +49,27 @@ class ReportController extends Controller
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
+        // dd($request->all());
         try {
-            $data = $this->reportService->createProperty($request->validated());
+            $data = $this->reportService->createReport($request->validated());
 
             return $this->successResponse(
-                __('validationMessages.property.created_successfully'),
+                __('validationMessages.resource_created_successfully'),
                 $data,
-                201
+                200
             );
 
         } catch (QueryException $qe) {
-            $this->logException($qe, __('validationMessages.data_saved_failed'));
+            $this->logException($qe, __('validationMessages.resource_create_failed', ['resource' => 'Report']));
 
-            return $this->errorResponse(__('validationMessages.data_saved_failed'), [
+            return $this->errorResponse(__('validationMessages.resource_create_failed', ['resource' => 'Report']), [
                 'error' => $qe->getMessage(),
             ], 500);
 
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.property.create_failed'));
+            $this->logException($e, __('validationMessages.resource_create_failed', ['resource' => 'Report']));
 
-            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+            return $this->errorResponse(__('validationMessages.resource_create_failed', ['resource' => 'Report']), [
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -146,10 +142,10 @@ class ReportController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
-            $this->reportService->deleteProperty($id);
+            $this->reportService->deleteReport($id);
 
             return $this->successResponse(
-                __('validationMessages.property.deleted_successfully')
+                __('Report deleted successfully.')
             );
 
         } catch (AuthorizationException $e) {
@@ -158,7 +154,7 @@ class ReportController extends Controller
             ], 403);
 
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.property.delete_failed'));
+            $this->logException($e, __('Report deleted failed'));
 
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Report extends Model
 {
@@ -15,4 +16,14 @@ class Report extends Model
         'status',
         'notes',
     ];
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class,'property_id','id');
+    }
+
+     public function template()
+    {
+        return $this->belongsTo(Template::class,'template_id','id');
+    }
 }

@@ -3,28 +3,78 @@
 namespace App\Services;
 
 use App\Models\Report;
-use App\Repositories\Contracts\ReportRepository;
-use App\Resources\CountryResource;
+use App\Resources\ReportResource;
 use App\Services\Contracts\ReportService as ReportServiceContract;
+use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ReportService implements ReportServiceContract
 {
-    protected ReportRepository $reportRepository;
+    // protected ReportRepository $reportRepository;
 
-    public function __construct(ReportRepository $reportRepository)
+    // public function __construct(ReportRepository $reportRepository)
+    // {
+    //     $this->reportRepository = $reportRepository;
+    // }
+
+    public function listReports(): AnonymousResourceCollection
     {
-        $this->reportRepository = $reportRepository;
-    }
+        $columnQuery = request()->input('columnQuery');
+        $columnName = request()->input('columnName');
 
-    public function listReports(): AnonymousResourceCollection{
+        $query = Report::with(['property', 'template'])
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'DESC');
 
+        if ($columnName && $columnQuery) {
+            if (str_contains($columnName, '.')) {      // search query on relation
+                [$relation, $column] = explode('.', $columnName);
+
+                $query->whereHas($relation, function ($q) use ($column, $columnQuery) {
+                    $q->where($column, 'LIKE', "%{$columnQuery}%");
+                });
+            } else {
+                $query->where($columnName, 'LIKE', "%{$columnQuery}%");
+            }
+        }
+
+        // Todo: make trait/helper for getting boolean from request safely
+        $paginate = filter_var(
+            is_string($v = request()->input('paginate', true)) ? trim($v, "\"'") : $v,
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_NULL_ON_FAILURE
+        ) ?? true;
+
+        if (!$paginate) {
+            $reports = $query->get();
+        } else {
+            $reports = $query->paginate(request()->input('perPage') ?? 10);
+        }
+
+        return ReportResource::collection($reports);
     }
 
     public function createReport(array $data): Report
     {
+        $data['user_id'] = auth()->id();
         $report = Report::create($data);
         return $report;
+    }
+
+    public function deleteReport(int $id)
+    {
+        $report = Report::find($id);
+        if (!$report) {
+            throw new \Exception('Report not found.');
+        }
+
+        if ($report->user_id !== Auth::id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+
+        $report->delete();
+
     }
 }
 
