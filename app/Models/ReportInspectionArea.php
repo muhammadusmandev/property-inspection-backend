@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     Report,
-    ReportSectionItem,
-    ReportSectionDefect,
+    ReportInspectionAreaItem,
+    ReportDefect,
     Media
 };
 
-class ReportSection extends Model
+class ReportInspectionArea extends Model
 {
     protected $fillable = [
         'report_id',
@@ -28,12 +28,12 @@ class ReportSection extends Model
 
     public function items()
     {
-        return $this->hasMany(ReportSectionItem::class);
+        return $this->hasMany(ReportInspectionAreaItem::class);
     }
 
     public function defects()
     {
-        return $this->hasMany(ReportSectionDefect::class);
+        return $this->hasMany(ReportDefect::class);
     }
 
     public function media()

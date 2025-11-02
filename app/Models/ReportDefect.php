@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ReportSectionDefect extends Model
+class ReportDefect extends Model
 {
     protected $fillable = [
         'report_section_id',

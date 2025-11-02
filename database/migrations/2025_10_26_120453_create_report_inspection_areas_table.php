@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_section_items', function (Blueprint $table) {
+        Schema::create('report_inspection_areas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_section_id')->constrained('reports')->cascadeOnDelete();
+            $table->foreignId('report_id')->constrained('reports')->cascadeOnDelete();
             $table->string('name',100);
             $table->enum('condition',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
             $table->enum('cleanliness',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_section_items');
+        Schema::dropIfExists('report_inspection_areas');
     }
 };

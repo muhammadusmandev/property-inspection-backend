@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_section_defects', function (Blueprint $table) {
+        Schema::create('report_defects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_section_id')->constrained('report_sections')->cascadeOnDelete();
-            $table->foreignId('report_section_item_id')->nullable()->constrained('report_section_items')->cascadeOnDelete();
+            $table->foreignId('report_inspection_area_id')->constrained('report_inspection_areas')->cascadeOnDelete();
+            $table->foreignId('report_inspection_area_item_id')->nullable()->constrained('report_inspection_area_items')->cascadeOnDelete();
             $table->enum('category',['none','cleaning','maintenance'])->default('none');
             $table->text('description')->nullable();
             $table->timestamps();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_section_defects');
+        Schema::dropIfExists('report_defects');
     }
 };
