@@ -38,7 +38,8 @@ class OtpVerificationController extends Controller
             $verificationData = $this->otpService->verify(
                 $validData['identifier'], 
                 $validData[$validData['identifier']],
-                $validData['otp']
+                $validData['otp'],
+                $validData['intent'] ?? ''
             );
 
             $message = match($verificationData['status']) {
