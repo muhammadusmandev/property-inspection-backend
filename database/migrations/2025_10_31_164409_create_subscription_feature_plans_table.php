@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('subscription_feature_plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subscription_id')->constrained('subscription_plans')->cascadeOnDelete();
+            $table->foreignId('plan_id')->constrained('subscription_plans')->cascadeOnDelete();
             $table->foreignId('subscription_feature_id')->constrained('subscription_features')->cascadeOnDelete();
             $table->string('value')->nullable();
             $table->timestamps();

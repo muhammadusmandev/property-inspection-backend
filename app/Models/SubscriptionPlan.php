@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionPlan extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'slug',
@@ -17,4 +22,14 @@ class SubscriptionPlan extends Model
         'description',
         'is_active',
     ];
+
+    /**
+     * Get the features associated with the plan.
+     */
+    public function features()
+    {
+        return $this->belongsToMany(SubscriptionFeature::class, 'subscription_feature_plans', 'plan_id', 'subscription_feature_id')
+                    ->withPivot('value')
+                    ->withTimestamps();
+    }
 }

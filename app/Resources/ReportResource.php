@@ -23,6 +23,7 @@ class ReportResource extends JsonResource
             'template_id' => $this->template_id,
             'status' => $this->status,
             'type' => $this->type,
+            'report_date' => $this->report_date,
             'property' => $this->property,
             'template' => $this->template,
         ];

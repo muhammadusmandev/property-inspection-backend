@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Reports\ReportController;
 use App\Http\Controllers\Api\Template\TemplateController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
+use App\Http\Controllers\Api\Billing\BillingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -49,6 +50,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('reports', ReportController::class);
         Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
+        Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
     });
 
 });

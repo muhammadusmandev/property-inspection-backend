@@ -20,9 +20,11 @@ class SubscriptionPlansSeeder extends Seeder
                 'currency' => 'USD',
                 'description' => 'Solo plan for individual use',
                 'features' => [
-                    ['name' => '1 Project', 'value' => '1'],
-                    ['name' => 'Basic Support', 'value' => 'Email Only'],
-                    ['name' => 'Limited Reports', 'value' => 'Yes'],
+                    ['name' => 'Properties / Units', 'value' => '100'],
+                    ['name' => 'Reports', 'value' => 'Unlimited'],
+                    ['name' => 'Photos / Attachements', 'value' => 'Unlimited'],
+                    ['name' => 'Clients', 'value' => 'Unlimited'],
+                    ['name' => '24/7 Customer Support', 'value' => 'Chat & Email'],
                 ],
             ],
             [
@@ -31,11 +33,13 @@ class SubscriptionPlansSeeder extends Seeder
                 'monthly_price' => 200,
                 'annual_price' => 2200,
                 'currency' => 'USD',
-                'description' => 'Team plan with advanced features',
+                'description' => 'Standard plan with advanced features',
                 'features' => [
-                    ['name' => '10 Projects', 'value' => '10'],
-                    ['name' => 'Priority Support', 'value' => 'Email & Chat'],
-                    ['name' => 'Full Reports', 'value' => 'Yes'],
+                    ['name' => 'Properties / Units', 'value' => '500'],
+                    ['name' => 'Reports', 'value' => 'Unlimited'],
+                    ['name' => 'Photos / Attachements', 'value' => 'Unlimited'],
+                    ['name' => 'Clients', 'value' => 'Unlimited'],
+                    ['name' => '24/7 Customer Support', 'value' => 'Phone, Chat & Email'],
                 ],
             ],
             [
@@ -44,11 +48,13 @@ class SubscriptionPlansSeeder extends Seeder
                 'monthly_price' => 500,
                 'annual_price' => 5500,
                 'currency' => 'USD',
-                'description' => 'Enterprise plan with all features',
+                'description' => 'Pro plan with all features',
                 'features' => [
-                    ['name' => 'Unlimited Projects', 'value' => 'Unlimited'],
-                    ['name' => '24/7 Support', 'value' => 'Phone, Chat & Email'],
-                    ['name' => 'Advanced Analytics', 'value' => 'Yes'],
+                    ['name' => 'Properties / Units', 'value' => '1000'],
+                    ['name' => 'Reports', 'value' => 'Unlimited'],
+                    ['name' => 'Photos / Attachements', 'value' => 'Unlimited'],
+                    ['name' => 'Clients', 'value' => 'Unlimited'],
+                    ['name' => '24/7 Customer Support', 'value' => 'Chat & Email'],
                 ],
             ],
         ];
@@ -76,7 +82,7 @@ class SubscriptionPlansSeeder extends Seeder
 
                 // Pivot table
                 DB::table('subscription_feature_plans')->insert([
-                    'subscription_id' => $planId,
+                    'plan_id' => $planId,
                     'Subscription_feature_id' => $featureId,
                     'value' => $feature['value'],
                     'created_at' => Carbon::now(),
