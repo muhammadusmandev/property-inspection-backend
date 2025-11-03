@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Models\Report;
+use App\Models\ReportInspectionArea;
+use App\Models\ReportInspectionAreaItem;
+use App\Models\Template;
 use App\Resources\ReportResource;
 use App\Services\Contracts\ReportService as ReportServiceContract;
 use Auth;
@@ -59,6 +62,34 @@ class ReportService implements ReportServiceContract
     {
         $data['user_id'] = auth()->id();
         $report = Report::create($data);
+        if (!empty($data['template_id'])) {
+            $template = Template::with('areas.items')->find($data['template_id']);
+
+            if ($template && $template->areas->count()) {
+
+                foreach ($template->areas as $index => $area) {
+
+                    $reportInspectionArea = ReportInspectionArea::create([
+                        'report_id' => $report->id,
+                        'name' => $area->name,
+                        'description' => $area->description,
+                        'order' => $index
+                    ]);
+
+                    if ($area->items && $area->items->count()) {
+                        foreach ($area->items as $index => $item) {
+                            ReportInspectionAreaItem::create([
+                                'report_inspection_area_id' => $reportInspectionArea->id,
+                                'name' => $item->name,
+                                'description' => $item->description,
+                                'order' => $index
+
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
         return $report;
     }
 
@@ -76,5 +107,13 @@ class ReportService implements ReportServiceContract
         $report->delete();
 
     }
+
+    public function showReport(int $id): ReportResource
+    {
+        $report = Report::with(['areas.items'])->find($id);
+        return new ReportResource($report);
+
+    }
+
 }
 

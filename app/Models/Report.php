@@ -27,4 +27,9 @@ class Report extends Model
     {
         return $this->belongsTo(Template::class,'template_id','id');
     }
+
+    public function areas()
+    {
+        return $this->hasMany(ReportInspectionArea::class);
+    }
 }

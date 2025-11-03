@@ -49,7 +49,6 @@ class ReportController extends Controller
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
-        // dd($request->all());
         try {
             $data = $this->reportService->createReport($request->validated());
 
@@ -81,7 +80,7 @@ class ReportController extends Controller
     public function show(int $id): JsonResponse
     {
         try {
-            $data = $this->reportService->showProperty($id);
+            $data = $this->reportService->showReport($id);
 
             return $this->successResponse(
                 __('validationMessages.property.retrieved_successfully'),
