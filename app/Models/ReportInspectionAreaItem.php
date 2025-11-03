@@ -10,16 +10,12 @@ use App\Models\{
 };
 class ReportInspectionAreaItem extends Model
 {
-    protected $fillable = ['report_section_id', 'name', 'description', 'condition','cleanliness','order'];
-    public function section()
+    protected $fillable = ['report_inspection_area_id', 'name', 'description', 'condition','cleanliness','order'];
+    public function area()
     {
         return $this->belongsTo(ReportInspectionArea::class);
     }
 
-    public function defects()
-    {
-        return $this->hasMany(ReportDefect::class, 'report_section_item_id');
-    }
 
     public function media()
     {

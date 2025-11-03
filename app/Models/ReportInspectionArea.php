@@ -40,4 +40,5 @@ class ReportInspectionArea extends Model
     {
         return $this->morphMany(Media::class, 'mediable');
     }
+
 }
