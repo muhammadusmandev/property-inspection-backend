@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->morphs('mediable');
+            $table->unsignedBigInteger('mediable_id');
+            $table->string('mediable_type');
             $table->string('file_path');
             $table->string('original_name');
-            $table->string('type')->default('image');
+            $table->string('type')->nullable();
+            $table->index(['mediable_id', 'mediable_type']);
             $table->timestamps();
         });
     }

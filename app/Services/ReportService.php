@@ -9,8 +9,10 @@ use App\Models\Template;
 use App\Resources\ReportResource;
 use App\Services\Contracts\ReportService as ReportServiceContract;
 use Auth;
+use DB;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Storage;
 
 class ReportService implements ReportServiceContract
 {
@@ -60,37 +62,48 @@ class ReportService implements ReportServiceContract
 
     public function createReport(array $data): Report
     {
-        $data['user_id'] = auth()->id();
-        $report = Report::create($data);
-        if (!empty($data['template_id'])) {
-            $template = Template::with('areas.items')->find($data['template_id']);
+        DB::beginTransaction();
 
-            if ($template && $template->areas->count()) {
+        try {
 
-                foreach ($template->areas as $index => $area) {
+            $data['user_id'] = auth()->id();
+            $report = Report::create($data);
 
-                    $reportInspectionArea = ReportInspectionArea::create([
-                        'report_id' => $report->id,
-                        'name' => $area->name,
-                        'description' => $area->description,
-                        'order' => $index
-                    ]);
+            if (!empty($data['template_id'])) {
+                $template = Template::with('areas.items')->find($data['template_id']);
 
-                    if ($area->items && $area->items->count()) {
-                        foreach ($area->items as $index => $item) {
-                            ReportInspectionAreaItem::create([
-                                'report_inspection_area_id' => $reportInspectionArea->id,
-                                'name' => $item->name,
-                                'description' => $item->description,
-                                'order' => $index
+                if ($template && $template->areas->count()) {
 
-                            ]);
+                    foreach ($template->areas as $areaIndex => $area) {
+
+                        $reportInspectionArea = ReportInspectionArea::create([
+                            'report_id' => $report->id,
+                            'name' => $area->name,
+                            'description' => $area->description,
+                            'order' => $areaIndex
+                        ]);
+
+                        if ($area->items && $area->items->count()) {
+                            foreach ($area->items as $itemIndex => $item) {
+                                ReportInspectionAreaItem::create([
+                                    'report_inspection_area_id' => $reportInspectionArea->id,
+                                    'name' => $item->name,
+                                    'description' => $item->description,
+                                    'order' => $itemIndex
+                                ]);
+                            }
                         }
                     }
                 }
             }
+
+            DB::commit();
+            return $report;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-        return $report;
     }
 
     public function deleteReport(int $id)
@@ -113,6 +126,116 @@ class ReportService implements ReportServiceContract
         $report = Report::with(['areas.items'])->find($id);
         return new ReportResource($report);
 
+    }
+
+    public function updateReport(int $id, array $data): Report
+    {
+        DB::beginTransaction();
+
+        try {
+            $report = Report::find($id);
+            $report->update([
+                "title" => $data['title'],
+                "property_id" => $data['property_id'],
+                "template_id" => $data['template_id'],
+                "type" => $data['type'],
+                "report_date" => $data['report_date']
+            ]);
+            $areaIds = [];
+
+            foreach ($data['areas'] as $areaKey => $areaData) {
+
+                $area = $report->areas()->updateOrCreate(
+                    ['id' => $areaData['id'] ?? null],
+                    [
+                        'name' => $areaData['name'],
+                        'condition' => $areaData['condition'] ?? null,
+                        'cleanliness' => $areaData['cleanliness'] ?? null,
+                        'description' => $areaData['description'] ?? null,
+                        'order' => $areaKey ?? null,
+                    ]
+                );
+
+                $areaIds[] = $area->id;
+
+                if (request()->hasFile("areas.$areaKey.media")) {
+                    $this->saveMedia($area, request()->file("areas.$areaKey.media"));
+                }
+
+                $itemIds = [];
+                foreach ($areaData['items'] as $itemKey => $itemData) {
+
+                    $item = $area->items()->updateOrCreate(
+                        ['id' => $itemData['id'] ?? null],
+                        [
+                            'name' => $itemData['name'],
+                            'description' => $itemData['description'] ?? null,
+                            'condition' => $itemData['condition'] ?? null,
+                            'cleanliness' => $itemData['cleanliness'] ?? null,
+                            'order' => $itemKey ?? null,
+                        ]
+                    );
+
+                    $itemIds[] = $item->id;
+
+                    if (request()->hasFile("areas.$itemKey.items.$itemKey.media")) {
+                        $this->saveMedia($item, request()->file("areas.$itemKey.items.$itemKey.media"));
+                    }
+                }
+
+                $area->items()->whereNotIn('id', $itemIds)->delete();
+
+                $defectIds = [];
+                foreach ($areaData['areaDefects'] ?? [] as $defectKey => $defectData) {
+
+                    $defect = $area->defects()->updateOrCreate(
+                        ['id' => $defectData['id'] ?? null],
+                        [
+                            'category' => $defectData['category'],
+                            'description' => $defectData['description'] ?? null,
+                        ]
+                    );
+
+                    $defectIds[] = $defect->id;
+
+                    if (request()->hasFile("areas.$defectKey.defects.$defectKey.media")) {
+                        $this->saveMedia($defect, request()->file("areas.$defectKey.defects.$defectKey.media"));
+                    }
+                }
+                $area->defects()->whereNotIn('id', $defectIds)->delete();
+            }
+            $report->areas()->whereNotIn('id', $areaIds)->delete();
+
+
+
+            DB::commit();
+            return $report;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function saveMedia($model, $files)
+    {
+        if (!$files)
+            return;
+
+        foreach ($files as $file) {
+            if ($file instanceof UploadedFile) {
+                if (!Storage::disk('public')->exists('reports')) {
+                    Storage::disk('public')->makeDirectory('reports');
+                }
+                $path = $file->store('reports', 'public');
+
+                $model->media()->create([
+                    'file_path' => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                    'type' => $file->getClientMimeType(),
+                ]);
+            }
+        }
     }
 
 }
