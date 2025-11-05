@@ -33,7 +33,7 @@ class ReportInspectionArea extends Model
 
     public function defects()
     {
-        return $this->hasMany(ReportDefect::class);
+        return $this->hasMany(ReportDefect::class,'report_inspection_area_id','id');
     }
 
     public function media()

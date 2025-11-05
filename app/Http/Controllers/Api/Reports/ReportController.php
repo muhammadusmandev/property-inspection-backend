@@ -14,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
-
 {
     use Loggable, ApiJsonResponse;
 
@@ -106,29 +105,12 @@ class ReportController extends Controller
      */
     public function update(UpdateReportRequest $request, int $id): JsonResponse
     {
+        // dd($request->all());
         try {
-            $data = $this->reportService->updateProperty($id, $request->validated());
-
-            return $this->successResponse(
-                __('validationMessages.property.updated_successfully'),
-                $data
-            );
-
-        } catch (AuthorizationException $e) {
-            return $this->errorResponse(__('validationMessages.unauthorized_access'), [
-                'error' => $e->getMessage(),
-            ], 403);
-
-        } catch (QueryException $qe) {
-            $this->logException($qe, __('validationMessages.data_saved_failed'));
-
-            return $this->errorResponse(__('validationMessages.data_saved_failed'), [
-                'error' => $qe->getMessage(),
-            ], 500);
-
+            $data = $this->reportService->updateReport($id, $request->validated());
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.property.update_failed'));
-
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Template']));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);

@@ -3,6 +3,8 @@
 namespace App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateReportRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,30 +24,45 @@ class UpdateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'report_id' => 'required|integer|exists:reports,id',
             'title' => 'required|string',
             'notes' => 'nullable|string',
             'property_id' => 'required|integer|exists:properties,id',
-            'template_id' => 'requiredinteger|exists:templates,id',
+            'template_id' => 'required|integer|exists:templates,id',
             'type' => 'required|in:check-in,check-out,inventory,inspection',
+            'report_date' => 'required|date',
+            'areas' => 'nullable|array',
+            'areas.*.id' => 'nullable|exists:report_inspection_areas,id',
+            'areas.*.name' => 'required|string',
+            'areas.*.condition' => 'required|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.cleanliness' => 'required|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.description' => 'nullable|string',
 
-            'inspection_areas' => 'nullable|array',
-            'inspection_areas.*.id' => 'nullable|exists:report_inspection_areas,id',
-            'inspection_areas.*.name' => 'required|string',
-            'inspection_areas.*.condition' => 'required|in:excelent,good,fair,poor,Unacceptable',
-            'inspection_areas.*.cleanliness' => 'required|in:excelent,good,fair,poor,Unacceptable',
-            'inspection_areas.*.description' => 'nullable|string',
+            'areas.*.items' => 'nullable|array',
+            'areas.*.items.*.name' => 'nullable|string',
+            'areas.*.items.*.condition' => 'required_with:areas.*.items.*.name|nullable|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.items.*.cleanliness' => 'required_with:areas.*.items.*.name|nullable|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.items.*.description' => 'nullable|string',
 
-            'inspection_areas.*.items' => 'nullable|array',
-            'inspection_areas.*.items.*.name' => 'nullable|string',
-            'inspection_areas.*.items.*.condition' => 'required_with:inspection_areas.*.items.*.name|nullable|in:excelent,good,fair,poor,Unacceptable',
-            'inspection_areas.*.items.*.cleanliness' => 'required_with:inspection_areas.*.items.*.name|nullable|in:excelent,good,fair,poor,Unacceptable',
-            'inspection_areas.*.items.*.description' => 'nullable|string',
-
-            'inspection_areas.*.defects' => 'nullable|array',
-            'inspection_areas.*.defects.*.id' => 'nullable|exists:report_defects,id',
-            'inspection_areas.*.defects.*.category' => 'required|in:none,cleaning,maintenance',
-            'inspection_areas.*.defects.*.description' => 'nullable|string',
+            'areas.*.areaDefects' => 'nullable|array',
+            'areas.*.areaDefects.*.id' => 'nullable|exists:report_defects,id',
+            'areas.*.areaDefects.*.category' => 'required|in:none,cleaning,maintenance',
+            'areas.*.areaDefects.*.description' => 'nullable|string',
         ];
+    }
+
+      /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @return void
+     */
+    protected function failedValidation(Validator  $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Validation failed.',
+            'errors'  => $validator->errors(),
+        ], 422));
     }
 }
