@@ -51,6 +51,7 @@ Route::prefix('v1')->group(function () {
         Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
         Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
+        Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
     });
 
 });

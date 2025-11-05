@@ -20,7 +20,8 @@ class ShowBillingResource extends JsonResource
                 'name' => $request->user()->name,
                 'email' => $request->user()->email,
             ],
-            'plans' => SubscriptionPlanResource::collection($this)
+            'plans' => SubscriptionPlanResource::collection($this),
+            'stripe_client_secret' => $request->user()->createSetupIntent()->client_secret,
         ];
     }
 }
