@@ -66,24 +66,48 @@ class BillingController extends Controller
     public function activateSubscription(StoreActivateSubscriptionRequest $request): JsonResponse
     {
         try {
-            $this->billingService->activateSubscription($request->validated());
-
+            $status = $this->billingService->activateSubscription($request->validated());
+            
             return $this->successResponse('Subscription activated successfully');
         } catch (IncompletePayment $e) {
             // Todo: must send this billing data incase in any of exception
-            $this->logException($e, 'Incomplete payment, user action required for user:' . $request->user()->id);
-
+            $this->logException($e, 'Incomplete payment, user action required for user:' . $request->user()->id . ' original message:' . $e->getMessage());
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => 'Payment requires additional authentication.',
             ], 500);
         } catch (ApiErrorException $e) {
-            $this->logException($e, 'Stripe API error for User:' . $request->user()->id);
-
+            $this->logException($e, 'Stripe API error for User:' . $request->user()->id . ' original message:' . $e->getMessage());
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => 'We encountered a problem while processing your payment. Please try again later.',
             ], 500);
         } catch (\Exception $e) {
             $this->logException($e, __('validationMessages.resource_create_failed', ['resource' => 'Activate Subscription']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get user subscription status
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function subscriptionStatus(): JsonResponse
+    {
+        try {
+            $data = $this->billingService->subscriptionStatus();
+
+            return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
+        } catch (AuthorizationException $e) {
+            return $this->errorResponse(__('validationMessages.something_went_wrong'),[
+                'error' => $e->getMessage()
+            ], 403);
+
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_fetch_failed', ['resource' => 'Subscription Status']));
 
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),

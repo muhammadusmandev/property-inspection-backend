@@ -3,7 +3,7 @@
 namespace App\Services\Contracts;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Resources\{ ShowBillingResource };
+use App\Resources\{ ShowBillingResource, SubscriptionStatusResource };
 
 interface BillingService
 {
@@ -23,4 +23,12 @@ interface BillingService
      * 
      */
     public function activateSubscription(array $billingData): void;
+
+    /**
+     * Get user subscription status.
+     *
+     * @return \Illuminate\Http\JsonResponse|SubscriptionStatusResource
+     * 
+     */
+    public function subscriptionStatus(): SubscriptionStatusResource;
 }

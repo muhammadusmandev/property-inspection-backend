@@ -7,7 +7,7 @@ use App\Repositories\Contracts\BillingRepository as BillingRepositoryContract;
 use Illuminate\Auth\Access\AuthorizationException;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
-use App\Resources\{ ShowBillingResource };
+use App\Resources\{ ShowBillingResource, SubscriptionStatusResource };
 use App\Models\UserBillingDetail;
 use DB;
 
@@ -35,7 +35,7 @@ class BillingService implements BillingServiceContract
         $user = auth()->user();
 
         // check if trial available or already used
-        if (!$user->onTrial() && $user->subscribed('default')){
+        if ($user->onTrial() || $user->hasExpiredTrial() || $user->subscribed('default')){
             throw new AuthorizationException(__('validationMessages.already_subscribe_but_try_billing'));
         }
 
@@ -58,11 +58,12 @@ class BillingService implements BillingServiceContract
 
             $user = auth()->user();
             // attach payment method
-            $user->updateDefaultPaymentMethod($billingData['stripe_payment_method']);
+            $status = $user->updateDefaultPaymentMethod($billingData['stripe_payment_method']);
 
             // Create subscription and activate it
             if (!$user->subscribed('default')) {
-                $user->newSubscription('default', $billingData['stripe_plan_price_id'])
+                $status = $user->newSubscription('default', $billingData['stripe_plan_price_id'])
+                    ->trialDays(7)   // Todo: Make trial days dynamic centralized control
                     ->create($billingData['stripe_payment_method']);
             }
 
@@ -95,5 +96,18 @@ class BillingService implements BillingServiceContract
             throw $e;
 
         }
+    }
+
+    /**
+     * Get user subscription status.
+     *
+     * @return \Illuminate\Http\JsonResponse|SubscriptionStatusResource
+     * 
+     */
+    public function subscriptionStatus(): SubscriptionStatusResource
+    {
+        $user = auth()->user();
+
+        return new SubscriptionStatusResource(optional($user->subscription('default')));
     }
 }
