@@ -123,7 +123,12 @@ class ReportService implements ReportServiceContract
 
     public function showReport(int $id): ReportResource
     {
-        $report = Report::with(['areas.items'])->find($id);
+        $report = Report::with([
+            'areas' => function ($query) {
+                $query->latest();
+            },
+            'areas.items'
+        ])->find($id);
         return new ReportResource($report);
 
     }

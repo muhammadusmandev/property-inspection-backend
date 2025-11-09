@@ -15,10 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('report_inspection_area_id')->constrained('report_inspection_areas')->cascadeOnDelete();
             $table->string('name',100);
-            $table->enum('condition',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
-            $table->enum('cleanliness',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
             $table->text('description')->nullable();
-            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class ReportAreaResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'descrption' => $this->descrption,
+            'description' => $this->description,
             'condition' => $this->condition,
             'cleanliness' => $this->cleanliness,
             'items' => ReportAreaItemResource::collection($this->whenLoaded('items')) ?? [],

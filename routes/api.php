@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Branch\BranchController;
 use App\Http\Controllers\Api\Client\ClientController;
 use App\Http\Controllers\Api\Reports\ReportController;
+use App\Http\Controllers\Api\Reports\ReportInspectionAreaController;
 use App\Http\Controllers\Api\Template\TemplateController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
@@ -47,6 +48,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('templates', TemplateController::class);
         Route::apiResource('inspection-areas', InspectionAreaController::class);
         Route::apiResource('inspection-area-items', InspectionAreaItemController::class);
+        Route::apiResource('report-inspection-areas', ReportInspectionAreaController::class);
         Route::apiResource('reports', ReportController::class);
         Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('report_id')->constrained('reports')->cascadeOnDelete();
             $table->string('name',100);
-            $table->enum('condition',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
-            $table->enum('cleanliness',['excelent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
+            $table->enum('condition',['excellent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
+            $table->enum('cleanliness',['excellent', 'good', 'fair', 'poor', 'Unacceptable'])->default('good');
             $table->text('description')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();

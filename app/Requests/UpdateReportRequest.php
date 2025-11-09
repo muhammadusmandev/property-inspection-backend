@@ -33,14 +33,14 @@ class UpdateReportRequest extends FormRequest
             'areas' => 'nullable|array',
             'areas.*.id' => 'nullable|exists:report_inspection_areas,id',
             'areas.*.name' => 'required|string',
-            'areas.*.condition' => 'required|in:excelent,good,fair,poor,unacceptable',
-            'areas.*.cleanliness' => 'required|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.condition' => 'required|in:excellent,good,fair,poor,unacceptable',
+            'areas.*.cleanliness' => 'required|in:excellent,good,fair,poor,unacceptable',
             'areas.*.description' => 'nullable|string',
 
             'areas.*.items' => 'nullable|array',
             'areas.*.items.*.name' => 'nullable|string',
-            'areas.*.items.*.condition' => 'required_with:areas.*.items.*.name|nullable|in:excelent,good,fair,poor,unacceptable',
-            'areas.*.items.*.cleanliness' => 'required_with:areas.*.items.*.name|nullable|in:excelent,good,fair,poor,unacceptable',
+            'areas.*.items.*.condition' => 'required_with:areas.*.items.*.name|nullable|in:excellent,good,fair,poor,unacceptable',
+            'areas.*.items.*.cleanliness' => 'required_with:areas.*.items.*.name|nullable|in:excellent,good,fair,poor,unacceptable',
             'areas.*.items.*.description' => 'nullable|string',
 
             'areas.*.areaDefects' => 'nullable|array',
