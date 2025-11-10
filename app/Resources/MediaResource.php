@@ -19,6 +19,8 @@ class MediaResource extends JsonResource
             'file_path' => $this->file_path,
             'original_name' => $this->original_name,
             'type' => $this->type,
+            'thumbnail_path' => $this->thumbnail_path,
+            'thumbnail_type' => $this->thumbnail_type
         ];
     }
 }

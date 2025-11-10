@@ -11,7 +11,9 @@ class Media extends Model
         'mediable_type',
         'file_path',
         'original_name',
-        'type'
+        'type',
+        'thumbnail_path',
+        'thumbnail_type'
     ];
     public function mediable()
     {

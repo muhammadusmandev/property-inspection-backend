@@ -169,14 +169,17 @@ class ReportInspectionAreaService implements ReportInspectionAreaServiceContract
                             $constraint->upsize();
                         });
 
-                    $image_path = Storage::disk('public')->put(
-                        'report_inspection_areas/' . $filename,
+                    $image_path = 'report_inspection_areas/' . $filename;
+                    $thumbnail_path = 'report_inspection_areas/thumbnails/' . $filename;
+
+                    Storage::disk('public')->put(
+                        $image_path,
                         (string) $image->encodeByExtension($file->getClientOriginalExtension(), quality: 90) // 90% quality
                     );
 
                     // thumbnail
                     Storage::disk('public')->put(
-                        'report_inspection_areas/thumbnails/' . $filename,
+                        $thumbnail_path,
                         (string) $thumbnail->encodeByExtension($file->getClientOriginalExtension(), quality: 80) // 80% quality
                     );
 
@@ -184,6 +187,8 @@ class ReportInspectionAreaService implements ReportInspectionAreaServiceContract
                         'file_path' => $image_path,
                         'original_name' => $file->getClientOriginalName(),
                         'type' => $file->getClientMimeType(),
+                        'thumbnail_path' => $thumbnail_path,
+                        'thumbnail_type' => $file->getClientMimeType(),
                     ]);
                 }
             }

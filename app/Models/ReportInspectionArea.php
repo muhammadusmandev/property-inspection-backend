@@ -9,6 +9,7 @@ use App\Models\{
     ReportDefect,
     Media
 };
+use Storage;
 
 class ReportInspectionArea extends Model
 {
@@ -20,6 +21,25 @@ class ReportInspectionArea extends Model
         'description',
         'order'
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($area) {
+            foreach ($area->media as $media) {
+                // delete file
+                if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+                    Storage::disk('public')->delete($media->file_path);
+                }
+
+                // delete thumbnail if exist
+                if ($media->thumbnail_path && Storage::disk('public')->exists($media->thumbnail_path)) {
+                    Storage::disk('public')->delete($media->thumbnail_path);
+                }
+
+                $media->delete();
+            }
+        });
+    }
 
     public function report()
     {
@@ -40,5 +60,4 @@ class ReportInspectionArea extends Model
     {
         return $this->morphMany(Media::class, 'mediable');
     }
-
 }
