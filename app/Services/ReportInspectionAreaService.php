@@ -7,7 +7,10 @@ use App\Repositories\Contracts\ReportInspectionAreaRepository as ReportInspectio
 use App\Resources\ReportInspectionAreaResource;
 use App\Models\ReportInspectionArea;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Auth\Access\AuthorizationException;
+use \Illuminate\Http\UploadedFile;
+use Storage;
 use DB;
 
 /**
@@ -121,5 +124,74 @@ class ReportInspectionAreaService implements ReportInspectionAreaServiceContract
         }
 
         $this->reportInspectionAreaRepository->delete($area);
+    }
+
+    /**
+     * Store report inspection area images.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function storeImages(array $data): void
+    {
+        $area = $this->reportInspectionAreaRepository->findById($data['area_id']);
+        if (!$area) {
+            throw new \Exception('Report inspection area not found.');
+        }
+
+        if ($area->report->user_id !== auth()->id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $images = $data['images'];
+
+            if (!$images){
+                throw new \Exception('Failed to upload images.');
+            }
+
+            foreach ($images as $file) {
+                if ($file instanceof UploadedFile) {
+                    if (!Storage::disk('public')->exists('report_inspection_areas')) {
+                        Storage::disk('public')->makeDirectory('report_inspection_areas');
+                    }
+
+                    $image = Image::read($file->getRealPath());
+
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                    // Optional: create thumbnail (200x200 max)
+                    $thumbnail = Image::read($file->getRealPath())
+                        ->resize(200, 200, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                    $image_path = Storage::disk('public')->put(
+                        'report_inspection_areas/' . $filename,
+                        (string) $image->encodeByExtension($file->getClientOriginalExtension(), quality: 90) // 90% quality
+                    );
+
+                    // thumbnail
+                    Storage::disk('public')->put(
+                        'report_inspection_areas/thumbnails/' . $filename,
+                        (string) $thumbnail->encodeByExtension($file->getClientOriginalExtension(), quality: 80) // 80% quality
+                    );
+
+                    $area->media()->create([
+                        'file_path' => $image_path,
+                        'original_name' => $file->getClientOriginalName(),
+                        'type' => $file->getClientMimeType(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

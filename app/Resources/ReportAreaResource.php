@@ -20,6 +20,7 @@ class ReportAreaResource extends JsonResource
             'description' => $this->description,
             'condition' => $this->condition,
             'cleanliness' => $this->cleanliness,
+            'media' => MediaResource::collection($this->media),
             'items' => ReportAreaItemResource::collection($this->whenLoaded('items')) ?? [],
         ];
     }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Reports;
 
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\ReportInspectionAreaService;
-use App\Requests\{ AddReportInspectionAreaRequest, UpdateReportInspectionAreaRequest };
+use App\Requests\{ AddReportInspectionAreaRequest, UpdateReportInspectionAreaRequest, StoreReportInspectionAreaImagesRequest };
 use App\Traits\ApiJsonResponse;
 use App\Traits\Loggable;
 use Illuminate\Http\JsonResponse;
@@ -105,6 +105,22 @@ class ReportInspectionAreaController extends Controller
 
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to delete report inspection area.', [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Store report inspection area images.
+     */
+    public function storeImages(StoreReportInspectionAreaImagesRequest $request): JsonResponse
+    {
+        try {
+            $this->reportInspectionAreaService->storeImages($request->validated());
+            return $this->successResponse('Report inspection area images uploaded successfully.');
+
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to upload report inspection area images.', [
                 'error' => $e->getMessage(),
             ], 500);
         }

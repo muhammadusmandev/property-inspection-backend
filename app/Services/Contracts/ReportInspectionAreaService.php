@@ -41,10 +41,10 @@ interface ReportInspectionAreaService
     public function updateReportInspectionArea(int $id, array $data): ReportInspectionArea;
 
     /**
-     * Delete report inspection area.
+     * Store report inspection area images.
      *
-     * @param int $id
+     * @param array $data
      * @return void
      */
-    public function deleteReportInspectionArea(int $id): void;
+    public function storeImages(array $data): void;
 }
