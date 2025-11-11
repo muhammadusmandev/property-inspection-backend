@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Report;
+use App\Models\{ Report, ReportChecklistItem };
 use App\Models\ReportInspectionArea;
 use App\Models\ReportInspectionAreaItem;
 use App\Models\Template;
@@ -243,5 +243,31 @@ class ReportService implements ReportServiceContract
         }
     }
 
+    /**
+     * Update report inspection checklist item.
+     * @param array $data
+     */
+    public function updateReportChecklist(array $data)
+    {
+        $report = Report::find($data['report_id']);
+
+        if (!$report) {
+            throw new \Exception('Report not found.');
+        }
+
+        if ($report->user_id !== Auth::id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+
+        ReportChecklistItem::updateOrCreate(
+            [
+                'report_id' => $data['report_id'],
+                'inspection_checklist_id' => $data['checklist_id'],
+            ],
+            [
+                'checked' => $data['checked'],
+            ]
+        );
+    }
 }
 

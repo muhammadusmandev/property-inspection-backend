@@ -14,4 +14,5 @@ interface ReportService
     public function showReport(int $id): ReportResource;
     public function updateReport(int $id, array $data): Report;
     // public function saveMedia($model, $files);
+    public function updateReportChecklist(array $data);
 }

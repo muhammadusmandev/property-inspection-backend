@@ -17,7 +17,7 @@ class MediaController extends Controller
     protected MediaServiceContract $mediaService;
 
     /**
-     * Inject PropertyServiceContract.
+     * Inject MediaServiceContract.
      */
     public function __construct(MediaServiceContract $mediaService)
     {
@@ -25,7 +25,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Get all properties for the logged-in user.
+     * Get all media.
      */
     public function index(): JsonResponse
     {
@@ -33,7 +33,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Store a new property.
+     * Store a new media.
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
@@ -41,7 +41,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Show property details.
+     * Show media details.
      */
     public function show(int $id): JsonResponse
     {
@@ -57,7 +57,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Delete a property.
+     * Delete a media.
      */
     public function destroy(int $id): JsonResponse
     {
