@@ -27,7 +27,7 @@ class ReportResource extends JsonResource
             'property' => $this->property,
             'template' => $this->template,
             'areas' => ReportAreaResource::collection($this->whenLoaded('areas')) ?? [],
-
+            'checklist' => $this->checklistItemsWithStatus(),
         ];
     }
 }

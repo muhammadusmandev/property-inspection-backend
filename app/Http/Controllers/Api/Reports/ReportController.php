@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api\Reports;
 
 use App\Http\Controllers\Controller;
-use App\Requests\StoreReportRequest;
-use App\Requests\UpdateReportRequest;
+use App\Requests\{ StoreReportRequest, UpdateReportRequest, UpdateReportChecklistRequest };
 use App\Traits\ApiJsonResponse;
 use App\Traits\Loggable;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -20,7 +19,7 @@ class ReportController extends Controller
     protected ReportServiceContract $reportService;
 
     /**
-     * Inject PropertyServiceContract.
+     * Inject reportServiceContract.
      */
     public function __construct(ReportServiceContract $reportService)
     {
@@ -44,7 +43,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Store a new property.
+     * Store a new report.
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
@@ -74,7 +73,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Show property details.
+     * Show report details.
      */
     public function show(int $id): JsonResponse
     {
@@ -82,7 +81,7 @@ class ReportController extends Controller
             $data = $this->reportService->showReport($id);
 
             return $this->successResponse(
-                __('validationMessages.property.retrieved_successfully'),
+                __('validationMessages.report.retrieved_successfully'),
                 $data
             );
 
@@ -92,7 +91,7 @@ class ReportController extends Controller
             ], 403);
 
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.property.show_failed'));
+            $this->logException($e, __('validationMessages.report.show_failed'));
 
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
@@ -101,7 +100,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Update an existing property.
+     * Update an existing report.
      */
     public function update(UpdateReportRequest $request, int $id): JsonResponse
     {
@@ -118,7 +117,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Delete a property.
+     * Delete a report.
      */
     public function destroy(int $id): JsonResponse
     {
@@ -137,6 +136,23 @@ class ReportController extends Controller
         } catch (\Exception $e) {
             $this->logException($e, __('Report deleted failed'));
 
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Todo: Move to separate service and controller
+     * Update report checklist item.
+     */
+    public function updateCheckList(UpdateReportChecklistRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->reportService->updateReportChecklist($request->validated());
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Checklist']));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);
