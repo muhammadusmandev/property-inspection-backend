@@ -56,6 +56,7 @@ Route::prefix('v1')->group(function () {
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
         Route::post('report-inspection-areas/upload-images', [ReportInspectionAreaController::class, 'storeImages']);
         Route::put('update-report-inspection-checklist', [ReportController::class, 'updateCheckList']);
+        Route::put('mark-report-locked/{id}', [ReportController::class, 'markReportLocked']);
         Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
         Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
         Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);

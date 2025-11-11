@@ -158,4 +158,20 @@ class ReportController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Update an existing report.
+     */
+    public function markReportLocked(int $id): JsonResponse
+    {
+        try {
+            $data = $this->reportService->markReportLocked($id);
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Report']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

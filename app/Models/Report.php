@@ -16,7 +16,8 @@ class Report extends Model
         'type',
         'status',
         'notes',
-        'report_date'
+        'report_date',
+        'locked_at'
     ];
 
     public function property()

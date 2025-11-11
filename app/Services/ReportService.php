@@ -269,5 +269,25 @@ class ReportService implements ReportServiceContract
             ]
         );
     }
+
+    /**
+     * Mark report lock
+     * @param int $id
+     */
+    public function markReportLocked(int $id): void
+    {
+        $report = Report::find($id);
+
+        if (!$report) {
+            throw new \Exception('Report not found.');
+        }
+
+        if ($report->user_id !== Auth::id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+
+        $report->locked_at = now();
+        $report->update();
+    }
 }
 
