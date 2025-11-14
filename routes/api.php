@@ -2,7 +2,13 @@
 
 use App\Http\Controllers\Api\Branch\BranchController;
 use App\Http\Controllers\Api\Client\ClientController;
+use App\Http\Controllers\Api\Reports\ReportController;
+use App\Http\Controllers\Api\Reports\ReportInspectionAreaController;
 use App\Http\Controllers\Api\Template\TemplateController;
+use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
+use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
+use App\Http\Controllers\Api\Media\MediaController;
+use App\Http\Controllers\Api\Billing\BillingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -41,9 +47,19 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
         Route::apiResource('templates', TemplateController::class);
-
+        Route::apiResource('inspection-areas', InspectionAreaController::class);
+        Route::apiResource('inspection-area-items', InspectionAreaItemController::class);
+        Route::apiResource('report-inspection-areas', ReportInspectionAreaController::class);
+        Route::apiResource('reports', ReportController::class);
+        Route::apiResource('medias', MediaController::class);
         Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
+        Route::post('report-inspection-areas/upload-images', [ReportInspectionAreaController::class, 'storeImages']);
+        Route::put('update-report-inspection-checklist', [ReportController::class, 'updateCheckList']);
+        Route::put('mark-report-locked/{id}', [ReportController::class, 'markReportLocked']);
+        Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
+        Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
+        Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);
     });
 
 });

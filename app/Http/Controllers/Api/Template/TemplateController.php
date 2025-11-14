@@ -24,10 +24,13 @@ class TemplateController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $data = $this->templateService->listTemplates();
-            return $this->successResponse('Templates retrieved successfully.', $data);
+            $data = $this->templateService->listTemplates()->response()->getData(true);
+            return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
         } catch (\Exception $e) {
-            return $this->errorResponse('Failed to fetch templates.', ['error' => $e->getMessage()], 500);
+            $this->logException($e, __('validationMessages.resource_fetch_failed', ['resource' => 'Inspection Area']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -35,9 +38,12 @@ class TemplateController extends Controller
     {
         try {
             $data = $this->templateService->createTemplate($request->validated());
-            return $this->successResponse('Template created successfully.', $data, 201);
+            return $this->successResponse(__('validationMessages.resource_created_successfully'), $data, 201);
         } catch (\Exception $e) {
-            return $this->errorResponse('Failed to create template.', ['error' => $e->getMessage()], 500);
+            $this->logException($e, __('validationMessages.resource_create_failed', ['resource' => 'Template']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -55,9 +61,12 @@ class TemplateController extends Controller
     {
         try {
             $data = $this->templateService->updateTemplate($id, $request->validated());
-            return $this->successResponse('Template updated successfully.', $data);
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
         } catch (\Exception $e) {
-            return $this->errorResponse('Failed to update template.', ['error' => $e->getMessage()], 500);
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Template']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 

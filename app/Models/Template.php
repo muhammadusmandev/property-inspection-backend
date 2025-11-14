@@ -3,18 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{User,TemplateSection};
+
 class Template extends Model
 {
-    protected $fillable = ['name', 'description', 'is_public', 'created_by'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name', 
+        'description', 
+        'is_default', 
+        'realtor_id'
+    ];
 
-    public function sections()
+    /**
+     * Template have many areas.
+     */
+    public function areas()
     {
-        return $this->hasMany(TemplateSection::class);
+        return $this->belongsToMany(InspectionArea::class, 'template_inspection_areas', 'template_id', 'inspection_area_id');
     }
 
+    /**
+     * Template belongs to user/realtor.
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'realtor_id');
     }
 }

@@ -31,6 +31,7 @@ class OTPVerifyRequest extends FormRequest
                 'required',
                 'digits:6'
             ],
+            'intent' => 'nullable|string|in:registration'
         ];
     }
 

@@ -10,9 +10,10 @@ interface OtpService
      * @param string $identifier
      * @param string $identifierValue
      * @param int $otp
+     * @param string $intent
      * @return array
      */
-    public function verify(string $identifier, $identifierValue, int $otp): array;
+    public function verify(string $identifier, string $identifierValue, int $otp, string $intent = ""): array;
 
     /**
      * Resend OTP.
