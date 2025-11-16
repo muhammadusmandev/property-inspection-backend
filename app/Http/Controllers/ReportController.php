@@ -21,9 +21,14 @@ class ReportController extends Controller
                     },
                     'areas.items' => function ($query) {
                         $query->select(['id', 'report_inspection_area_id', 'name']);
-                    }
+                    },
+                    'areas.media' => function ($query) {
+                        $query->select(['id', 'mediable_id', 'file_path']);
+                    },
                 ])
                 ->find($report_id);
+
+        $report->checklist = $report->checklistItemsWithStatus();
 
         return Pdf::view('reports.report_v1', [
                 'report' => $report
@@ -52,10 +57,21 @@ class ReportController extends Controller
                     },
                     'areas.media' => function ($query) {
                         $query->select(['id', 'mediable_id', 'file_path']);
-                    }
+                    },
+                    'property' => function ($query) {
+                        $query->select(['id', 'client_id', 'address', 'address_2', 'city', 'state', 'country', 'postal_code', 'type']);
+                    },
+                    'property.client' => function ($query) {
+                        $query->select(['id', 'name', 'email', 'phone_number']);
+                    },
+                    'user' => function ($query) {
+                        $query->select(['id', 'name', 'email', 'phone_number']);
+                    },
                 ])
                 ->find($report_id);
-                
+
+        $report->checklist = $report->checklistItemsWithStatus();
+
         return view('reports.report_v1', ['report' => $report]);
     }
 }

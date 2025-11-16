@@ -55,12 +55,12 @@
     /* Checklist Grid */
     .checklist-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 
     .checklist-item {
-        padding: 15px;
+        padding: 12px;
         background-color: #fafafa;
         border-left: 3px solid #005fa3;
     }
@@ -68,20 +68,20 @@
     .question {
         font-weight: 600;
         color: #333;
-        margin-bottom: 8px;
-        font-size: 14px;
+        margin-bottom: 5px;
+        font-size: 17px;
     }
 
     .answer {
         color: #666;
-        font-size: 14px;
+        font-size: 19px;
     }
 </style>
 <div class="container page-break">
     <!-- Title -->
     <div class="page-title">CHECKLIST</div>
 
-    <!-- Legend -->
+    <!-- Legend ---
     <div class="legend-table">
         <div class="legend-header">
             <div class="legend-cell">IN</div>
@@ -95,54 +95,19 @@
             <span>NP = Not Present</span>
             <span>C = Comments</span>
         </div>
-    </div>
+    </div> -->
 
     <!-- Information Section -->
     <div class="section">
-        <h2 class="section-title">Information</h2>
+        <!--<h2 class="section-title">Information</h2> -->
 
         <div class="checklist-grid">
-            <!-- Row 1 -->
+            @foreach($report->checklist as $item)
             <div class="checklist-item">
-                <div class="question">Key in lockbox?</div>
-                <div class="answer">Yes</div>
+                <div class="question">{{$item['label']}}?</div>
+                <div class="answer">{{$item['checked'] ? 'No' : 'Yes'}}</div>
             </div>
-            <div class="checklist-item">
-                <div class="question">Doors locked?</div>
-                <div class="answer">Yes</div>
-            </div>
-            <div class="checklist-item">
-                <div class="question">Lights off except those that were on?</div>
-                <div class="answer">Yes</div>
-            </div>
-
-            <!-- Row 2 -->
-            <div class="checklist-item">
-                <div class="question">Dishwasher off?</div>
-                <div class="answer">Yes</div>
-            </div>
-            <div class="checklist-item">
-                <div class="question">Oven off?</div>
-                <div class="answer">Yes</div>
-            </div>
-            <div class="checklist-item">
-                <div class="question">Water faucets off?</div>
-                <div class="answer">On when arrived</div>
-            </div>
-
-            <!-- Row 3 -->
-            <div class="checklist-item">
-                <div class="question">Electric panel cover replaced?</div>
-                <div class="answer">Yes</div>
-            </div>
-            <div class="checklist-item">
-                <div class="question">Furnace cover replaced?</div>
-                <div class="answer">Yes</div>
-            </div>
-            <div class="checklist-item">
-                <div class="question">Reset Thermostat?</div>
-                <div class="answer">Yes</div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>

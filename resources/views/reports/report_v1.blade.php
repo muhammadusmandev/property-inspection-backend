@@ -14,7 +14,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #ffffffff;
-            padding: 0px 20px;
+            padding: 0px 12px;
         }
 
         /* Title */
@@ -36,6 +36,7 @@
     </style>
 </head>
 <body>
+    @include('reports.partials.introduction')
     @include('reports.partials.table_of_content')
     @include('reports.partials.summary')
     @include('reports.partials.areas')
