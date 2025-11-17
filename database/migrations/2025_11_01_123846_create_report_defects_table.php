@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('report_defects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_inspection_area_id')->constrained('report_inspection_areas')->cascadeOnDelete();
-            $table->foreignId('report_inspection_area_item_id')->nullable()->constrained('report_inspection_area_items')->cascadeOnDelete();
-            $table->enum('category',['none','cleaning','maintenance'])->default('none');
-            $table->text('description')->nullable();
+            $table->foreignId('inspection_area_item_id')->nullable()->constrained('inspection_area_items')->cascadeOnDelete();
+            $table->enum('defect_type', ['cosmetic', 'structural', 'safety', 'none'])->default('none');
+            $table->enum('remediation', ['cleaning', 'maintenance', 'none'])->default('none')->comment('Action required to address the defect');
+            $table->enum('priority', ['low', 'medium', 'high'])->default('low');
+            $table->text('comments')->nullable();
             $table->timestamps();
         });
     }

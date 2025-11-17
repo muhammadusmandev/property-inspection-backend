@@ -8,10 +8,22 @@ class ReportDefect extends Model
 {
     protected $fillable = [
         'report_inspection_area_id',
-        'report_inspection_area_item_id',
-        'category',
-        'description'
+        'inspection_area_item_id',
+        'defect_type',
+        'remediation',
+        'priority',
+        'comments'
     ];
+
+    public function area()
+    {
+        return $this->belongsTo(ReportInspectionArea::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(InspectionAreaItem::class, 'inspection_area_item_id');
+    }
 
     public function media()
     {
