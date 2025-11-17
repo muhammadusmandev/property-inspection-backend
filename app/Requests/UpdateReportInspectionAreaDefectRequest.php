@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddReportInspectionAreaDefectRequest extends FormRequest
+class UpdateReportInspectionAreaDefectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class AddReportInspectionAreaDefectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'inspection_area_id' => ['required', 'integer', 'exists:report_inspection_areas,id'],
             'defect_item_id' => ['nullable', 'integer', 'exists:inspection_area_items,id'],
             'defect_type' => 'required|in:cosmetic,structural,safety,none',
             'remediation' => 'required|in:none,cleaning,maintenance',

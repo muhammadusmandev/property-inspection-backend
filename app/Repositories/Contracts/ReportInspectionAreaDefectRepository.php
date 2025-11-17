@@ -23,6 +23,15 @@ interface ReportInspectionAreaDefectRepository
     public function findById(int $id): ReportDefect;
 
     /**
+     * Update inspection area defect.
+     *
+     * @param ReportDefect $area
+     * @param array $data
+     * @return \App\Models\ReportDefect $defect
+     */
+    public function updateAreaDefect(ReportDefect $defect, array $data): void;
+
+    /**
      * Delete report inspection area defect.
      *
      * @param \App\Models\ReportDefect $defect
