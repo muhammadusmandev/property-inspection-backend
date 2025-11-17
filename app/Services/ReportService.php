@@ -127,7 +127,8 @@ class ReportService implements ReportServiceContract
             'areas' => function ($query) {
                 $query->latest();
             },
-            'areas.items'
+            'areas.items',
+            'areas.defects'
         ])->find($id);
         return new ReportResource($report);
 
