@@ -39,4 +39,20 @@ class ReportInspectionAreaDefectController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Delete a report inspection area defect.
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $this->reportInspectionAreaDefectService->deleteInspectionAreaDefect($id);
+            return $this->successResponse('Report inspection area defect deleted successfully.');
+
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to delete report inspection area defect.', [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

@@ -13,4 +13,12 @@ interface ReportInspectionAreaDefectService
      * @return \App\Models\ReportDefect
      */
     public function addInspectionAreaDefect(array $data): ReportDefect;
+
+    /**
+     * Delete report inspection area defect.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function deleteInspectionAreaDefect(int $id): void;
 }

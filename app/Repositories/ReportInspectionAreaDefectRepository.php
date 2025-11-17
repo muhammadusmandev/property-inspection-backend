@@ -24,4 +24,26 @@ class ReportInspectionAreaDefectRepository implements ReportInspectionAreaDefect
             'comments' => $data['comments'] ?? null,
         ]);
     }
+
+    /**
+     * Find report inspection area defect.
+     *
+     * @param int $id
+     * @return \App\Models\ReportDefect
+     */
+    public function findById(int $id): ReportDefect
+    {
+        return ReportDefect::find($id);
+    }
+
+    /**
+     * Delete report inspection area defect.
+     *
+     * @param \App\Models\ReportDefect $defect
+     * @return bool
+     */
+    public function delete(ReportDefect $defect): void
+    {
+        $defect->delete();
+    }
 }

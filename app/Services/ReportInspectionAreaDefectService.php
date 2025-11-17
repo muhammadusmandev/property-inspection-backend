@@ -88,4 +88,25 @@ class ReportInspectionAreaDefectService implements ReportInspectionAreaDefectSer
             throw $e;
         }
     }
+
+    /**
+     * Delete report inspection area defect.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function deleteInspectionAreaDefect(int $id): void
+    {
+        $defect = $this->reportInspectionAreaDefectRepository->findById($id);
+        
+        if (!$defect) {
+            throw new \Exception('Report inspection area defect not found.');
+        }
+
+        if ($defect->area?->report?->user_id !== auth()->id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+
+        $this->reportInspectionAreaDefectRepository->delete($defect);
+    }
 }

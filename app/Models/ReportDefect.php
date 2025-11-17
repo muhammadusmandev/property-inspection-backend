@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 
 class ReportDefect extends Model
 {
@@ -15,9 +16,28 @@ class ReportDefect extends Model
         'comments'
     ];
 
+    protected static function booted()
+    {
+        static::deleting(function ($defect) {
+            foreach ($defect->media as $media) {
+                // delete file
+                if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+                    Storage::disk('public')->delete($media->file_path);
+                }
+
+                // delete thumbnail if exist
+                if ($media->thumbnail_path && Storage::disk('public')->exists($media->thumbnail_path)) {
+                    Storage::disk('public')->delete($media->thumbnail_path);
+                }
+
+                $media->delete();
+            }
+        });
+    }
+
     public function area()
     {
-        return $this->belongsTo(ReportInspectionArea::class);
+        return $this->belongsTo(ReportInspectionArea::class, 'report_inspection_area_id');
     }
 
     public function item()
