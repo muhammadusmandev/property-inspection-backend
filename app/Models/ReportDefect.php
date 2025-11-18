@@ -16,6 +16,8 @@ class ReportDefect extends Model
         'comments'
     ];
 
+    protected $appends = ['item_name'];
+
     protected static function booted()
     {
         static::deleting(function ($defect) {
@@ -48,5 +50,9 @@ class ReportDefect extends Model
     public function media()
     {
         return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function getItemNameAttribute(){
+        return $this->item?->name;
     }
 }
