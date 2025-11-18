@@ -4,30 +4,18 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Stripe\Exception\ApiErrorException;
 use App\Traits\Loggable;
-use Laravel\Cashier\Cashier;
-use Stripe\Stripe;
-use Stripe\Product;
-use Stripe\Price;
 use Carbon\Carbon;
 
 class SubscriptionPlansSeeder extends Seeder
 {
     use Loggable;
 
-    public function __construct()
-    {
-        Stripe::setApiKey(config('cashier.secret'));
-    }
-
     public function run()
     {
         DB::beginTransaction();
 
         try{
-            $productName = config('app.name') ?? 'PropertInspection';
-
             $plans = [
                 [
                     'name' => 'Solo',
@@ -76,18 +64,13 @@ class SubscriptionPlansSeeder extends Seeder
                 ],
             ];
 
-            $product = $this->findOrCreateProduct($productName);
-
             foreach ($plans as $plan) {
-                $price = $this->findOrCreatePrice($product->id, $this->convertStripeAmount($plan['monthly_price']));
-
                 // Insert plan
                 $planId = DB::table('subscription_plans')->insertGetId([
                     'name' => $plan['name'],
                     'slug' => $plan['slug'],
                     'monthly_price' => $plan['monthly_price'],
                     'annual_price' => $plan['annual_price'],
-                    'stripe_monthly_price_id' => $price->id,
                     'currency' => $plan['currency'],
                     'description' => $plan['description'],
                     'created_at' => Carbon::now(),
@@ -117,11 +100,6 @@ class SubscriptionPlansSeeder extends Seeder
 
             DB::commit();
             $this->command->info('Subscription plans seeded successfully!');
-        } catch (ApiErrorException $e) {
-            DB::rollBack();
-            report($e);
-            $this->logException($e, 'Stripe API error in SubscriptionPlanSeeder');
-            $this->command->error('Stripe API error in Subscription seeder: '.$e->getMessage());
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
@@ -130,63 +108,5 @@ class SubscriptionPlansSeeder extends Seeder
         }
     }
 
-    /**
-     * Create Stripe product if not exist otherwise get existing.
-     */
-    protected function findOrCreateProduct(string $name)
-    {
-        try {
-            $products = Product::all(['limit' => 20]);
-
-            foreach ($products->data as $product) {
-                if ($product->name === $name) {
-                    $this->command->info("Product already exist: {$name}");
-                    return $product;
-                }
-            }
-
-            $product = Product::create(['name' => $name]);
-            $this->command->info("Product created successfully: {$name}");
-            return $product;
-        } catch (ApiErrorException $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * Create Stripe price for plan (but according to amount)
-     */
-    protected function findOrCreatePrice(string $productId, int $amount)
-    {
-        try {
-            $prices = Price::all(['product' => $productId, 'limit' => 50]);
-
-            foreach ($prices->data as $price) {
-                if ($price->unit_amount === $amount && $price->currency === 'usd') {
-                    $this->command->info("Price/Plan already exist: USD {$amount}/month");
-                    return $price;
-                }
-            }
-
-            $price = Price::create([
-                'product' => $productId,
-                'unit_amount' => $amount,
-                'currency' => 'usd',
-                'recurring' => ['interval' => 'day' , 'interval_count' => 1],    // 1 day for testing otherwise ['interval' => 'month']
-            ]);
-
-            $this->command->info("Price/Plan created successfully on stripe: USD {$amount}/month");
-            return $price;
-        } catch (ApiErrorException $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * Convert into stripe amount
-     * Todo: write global helper for this
-     */
-    protected function convertStripeAmount($amount){
-        return (int) round($amount * 100); 
-    }
+   
 }

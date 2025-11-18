@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('report_inspection_area_id')->constrained('report_inspection_areas')->cascadeOnDelete();
             $table->string('name',100);
             $table->text('description')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }
