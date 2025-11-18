@@ -95,43 +95,7 @@
     }
 </style>
 
-<div class="container page-break">
+<div class="report-page-container page-break">
     <!-- Title -->
     <h1 class="page-title">SUMMARY</h1>
-
-    <!-- Statistics Cards -->
-    <div class="stats-section">
-        <div class="stat-card">
-            <div class="stat-circle maintenance">4</div>
-            <p class="stat-label">MAINTENANCE ITEMS</p>
-        </div>
-        <div class="stat-card">
-            <div class="stat-circle recommendations">6</div>
-            <p class="stat-label">RECOMMENDATIONS</p>
-        </div>
-        <div class="stat-card">
-            <div class="stat-circle defects">13</div>
-            <p class="stat-label">DEFECTS/SAFETY</p>
-        </div>
-    </div>
-
-    <!-- Summary Content -->
-    <div class="summary-content">
-        <h2>SUMMARY</h2>
-
-        <div class="summary-item">
-            <h3 class="summary-heading maintenance">1) Maintenance Items</h3>
-            <p>Primarily comprised of maintenance items. These observations are not unimportant and should be addressed, however, some of them can be addressed as a DIY. These items can either be used in negotiation prior to closing or as a do list for addressing later.</p>
-        </div>
-
-        <div class="summary-item">
-            <h3 class="summary-heading recommendations">2) Recommendations</h3>
-            <p>Most items typically fall into this category. These observations usually require a qualified contractor to evaluate further, in order to determine if repairs or replacements are necessary. Also included in this category are mechanical and structural systems that are nearing the end of their useful life but are still working. Items in this category may or may not enter into negotiations. Please consult your real estate agent.</p>
-        </div>
-
-        <div class="summary-item">
-            <h3 class="summary-heading defects">3) Defects</h3>
-            <p>This category is composed of "material defects" (as defined by the state of Pennsylvania). These defects normally enter into the negotiation phase of the home sale. They consist of systems, structures, or components that are broken, not working as intended, not installed properly, of immediate safety concern, or have a significant adverse impact on the value of the property. These items should be addressed by a qualified contractor as soon as possible.</p>
-        </div>
-    </div>
 </div>

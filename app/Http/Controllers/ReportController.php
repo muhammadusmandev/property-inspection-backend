@@ -25,6 +25,13 @@ class ReportController extends Controller
                     'areas.media' => function ($query) {
                         $query->select(['id', 'mediable_id', 'file_path']);
                     },
+                    'areas.defects' => function ($query) {
+                        $query->select(['id', 'report_inspection_area_id', 'inspection_area_item_id', 'defect_type', 'remediation', 'priority', 'comments'])
+                        ->with(['item:id,name']);
+                    },
+                    'areas.defects.media' => function ($query) {
+                        $query->select(['id', 'mediable_id', 'file_path']);
+                    },
                 ])
                 ->find($report_id);
 
@@ -34,7 +41,8 @@ class ReportController extends Controller
                 'report' => $report
             ])
             ->headerHtml(view('reports.partials.header')->render())
-            ->margins(15, 5, 0, 5)
+            ->footerHtml(view('reports.partials.footer')->render())
+            ->margins(15, 5, 20, 5)
             ->format('A4')
             ->withBrowsershot(function (Browsershot $shot) {
                 $shot->setOption('printBackground', true);

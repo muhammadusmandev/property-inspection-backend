@@ -38,7 +38,6 @@
 <body>
     @include('reports.partials.introduction')
     @include('reports.partials.table_of_content')
-    @include('reports.partials.summary')
     @include('reports.partials.areas')
     @include('reports.partials.checklist')
     @include('reports.partials.standard_practices')

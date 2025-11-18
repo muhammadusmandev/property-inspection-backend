@@ -37,7 +37,7 @@
     }
 </style>
 
-<div class="container page-break">
+<div class="report-page-container page-break">
     <!-- Title -->
     <div class="page-title">TABLE OF CONTENTS</div>
 

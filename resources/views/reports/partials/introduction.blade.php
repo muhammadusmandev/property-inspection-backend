@@ -4,8 +4,7 @@
         position: relative;
         overflow: hidden;
         padding: 50px 35px;
-        background: #fbf8f8;
-        border-bottom: 1px solid #e9e9e9;
+        background: #fafafa;
     }
 
     /** .header-diagonal-bg {
@@ -84,7 +83,7 @@
     }
 
     .content {
-        padding: 80px 0px 60px;
+        padding: 80px 0px 25px;
     }
 
     .details-row{
@@ -116,7 +115,8 @@
         border-radius: 2px;
     }
 
-    .client-details .client-detail-item{
+    .client-details .client-detail-item,
+    .property-details .property-detail-item{
         display: flex;
         align-items: center;
         gap: 20px;
@@ -125,12 +125,23 @@
     .client-details .client-detail-item svg,
     .agent-details .agent-detail-item svg,
     .property-details .property-detail-item svg{
-        background: #18afe8;
-        stroke: #ffffff;
+        background: transparent;
+        stroke: #00a8f5;
         width: 40px;
         height: 40px;
         padding: 5px;
         border-radius: 5px;
+    }
+
+    .client-details .client-detail-item svg{
+        background: #18afe8;
+        stroke: #ffffff;
+    }
+
+    .intro-image img{
+        object-fit: cover;
+        width: 900px;
+        height: 450px;
     }
 
     .details-grid {
@@ -170,8 +181,8 @@
 
     .detail-value {
         font-size: 15px;
-        font-weight: 500;
-        color: #7a7a7a;
+        font-weight: 300;
+        color: #8c8c8c;
         line-height: 1.6;
     }
 
@@ -180,14 +191,14 @@
         padding: 30px 40px;
         background-color: #fafafa;
         text-align: center;
-        border-top: 1px solid #e0e8f5;
-        border-bottom: 1px solid #e0e8f5;
+        border-top: 1px solid #f3f3f3;
+        border-bottom: 1px solid #f3f3f3;
         margin-top: 10px;
     }
 
     .introduction-footer p {
-        font-size: 14px;
-        color: #666;
+        font-size: 13px;
+        color: #9c9a9a;
     }
 
     .introduction-footer .footer-website{
@@ -197,12 +208,13 @@
         font-weight: 500;
         margin-top: 7px;
         font-size: 12px;
+        margin-bottom: 10px
     }
 
 </style>
 
 
-<div class="introduction-container page-break">
+<div class="report-page-container introduction-container page-break">
     <!-- Header with Geometric Design -->
     <div class="introduction-header">
         <div class="header-diagonal-bg"></div>
@@ -317,49 +329,46 @@
             <!-- Images Section -->
             <div class="details-section">
                 <div class="intro-image">
-                    <img src="{{ image_to_base64('images/report_3.jpg') }}" width="400" height="100%" alt="Report Image">
+                    <img src="{{ image_to_base64('images/report_5.jpg') }}" width="100%" height="100%" alt="Report Image">
                 </div>
+            </div> 
+        </div>
+        <!-- Property Details Section -->
+        <div class="details-section property-details">
+            <div class="section-header">
+                <h2>Property Information</h2>
+                <div class="section-line"></div>
             </div>
-
-            <!-- Property Details Section -->
-            <div class="details-section property-details">
-                <div class="section-header">
-                    <h2>Property Information</h2>
-                    <div class="section-line"></div>
-                </div>
-                <div class="details-grid">
-                    <div class="property-detail-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                        <path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/>
-                        <path d="M9 21V12h6v9"/>
-                        </svg>
-                        @php 
-                            $address = [$report->property?->address, $report->property?->address_2, $report->property?->city, $report->property?->state, $report->property?->country, $report->property?->postal_code];
-                            $formated_address = array_filter($address, fn($value) => !empty($value));
-                        @endphp
-                        <div class="property-text-details">
-                            <label>Property Address</label>
-                            <p class="detail-value">{{implode(', ', $formated_address)}}</p>
-                        </div>
-                    </div>
-
-                    <div class="property-detail-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L3 13V3h10l7.59 7.59a2 2 0 0 1 0 2.82z"/>
-                            <circle cx="7.5" cy="7.5" r="1.5"/>
-                        </svg>
-
-                        <div class="property-text-details">
-                            <label>Property Type</label>
-                            <p class="detail-value" style="text-transform: capitalize">{{$report->property?->type ?? 'N/A'}}</p>
-                        </div>
+            <div class="details-grid">
+                <div class="property-detail-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                    <path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/>
+                    <path d="M9 21V12h6v9"/>
+                    </svg>
+                    @php 
+                        $address = [$report->property?->address, $report->property?->address_2, $report->property?->city, $report->property?->state, $report->property?->country, $report->property?->postal_code];
+                        $formated_address = array_filter($address, fn($value) => !empty($value));
+                    @endphp
+                    <div class="property-text-details">
+                        <label>Property Address</label>
+                        <p class="detail-value">{{implode(', ', $formated_address)}}</p>
                     </div>
                 </div>
-            </div>
 
-            
+                <div class="property-detail-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L3 13V3h10l7.59 7.59a2 2 0 0 1 0 2.82z"/>
+                        <circle cx="7.5" cy="7.5" r="1.5"/>
+                    </svg>
+
+                    <div class="property-text-details">
+                        <label>Property Type</label>
+                        <p class="detail-value" style="text-transform: capitalize">{{$report->property?->type ?? 'N/A'}}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -381,8 +390,8 @@
 
     <!-- Footer -->
     <div class="introduction-footer">
-        <p>Report Created with Inspexly | All rights are reserved</p>
         <img src="{{ image_to_base64('images/Inspexly_logo.jpg') }}" width="150" alt="Inspexly Logo" style="display: inline-block; margin-top: 20px">
         <a href="https://www.inspexly.com" class="footer-website">https://www.inspexly.com</a>
+        <p>Report created with Inspexly | All rights are reserved</p>
     </div>
 </div>

@@ -113,9 +113,62 @@
         height: auto;
         object-fit: cover;
     }
+
+    .defect-heading {
+        margin-top: 20px
+    }
+
+    .defect-heading .defect-number {
+        color: #535353;
+        font-weight: 400;
+    }
+
+    .defects-details {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .defects-details-item {
+        margin-top: 20px;
+        color: #535353;
+        font-size: 14px;
+        margin-bottom: 15px;
+        display: flex;
+        height: 40px;
+    }
+
+    .defects-details-item .item-title {
+        background: #06a8d8;
+        color: #fff;
+        display: flex; 
+        align-items: center;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .defects-details-item .item-value{
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+        padding-right: 15px;
+        border: 1px solid #d3d3d3;
+    }
+
+    .defects-details-comments strong{
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+
+    .defects-details-comments{
+        font-size: 15px;
+        margin-bottom: 25px;
+        margin-top: 10px;
+        margin-left: 5px;
+        color: #535353;
+    }
 </style>
 
-<div class="container page-break">
+<div class="report-page-container page-break">
     @php
         function image_to_base64_storage($path)
         {
@@ -132,7 +185,7 @@
         }
     @endphp
     <!-- Title -->
-    <h2 class="page-title">Inspection Areas</h2>
+    <h2 class="page-title" id="inspectionArea">Inspection Areas</h2>
     @foreach($report->areas as $area)
         <div class="area-section">
             <h3 class="area-name">
@@ -202,7 +255,63 @@
                     @endforeach
                 @endif
             </div>
+
+            @if(isset($area->defects) && count($area->defects) > 0)
+                @foreach($area->defects as $key => $defect)
+                    <h3 class="defect-heading"><svg width="20" height="20" viewBox="0 0 24 24" fill="red">
+                        <path d="M1 21h22L12 2 1 21z"/>
+                        <rect x="11" y="9" width="2" height="5" fill="white"/>
+                        <rect x="11" y="16" width="2" height="2" fill="white"/>
+                        </svg> {{$area->name}} Defect <span class="defect-number"># {{ $key + 1 }}</span>
+                    </h3>
+
+                    <div class="defects-details">
+                        <div class="defects-details-item">
+                            <div class="item-title"><strong>Category</strong></div> 
+                            <div class="item-value">{{ ucfirst($defect->defect_type) }}</div>
+                        </div>
+                        <div class="defects-details-item">
+                            <div class="item-title"><strong>Remediation</strong></div> 
+                            <div class="item-value">{{ ucfirst($defect->remediation) }}</div>
+                        </div>
+                        <div class="defects-details-item">
+                            <div class="item-title"><strong>Priority</strong></div>
+                            <div class="item-value">{{ ucfirst($defect->priority) }}</div>
+                        </div>
+                        <div class="defects-details-item">
+                            <div class="item-title"><strong>Item Name</strong></div>
+                            <div class="item-value">{{ ucfirst($defect->item?->name ?? 'n/a') }}</div>
+                        </div>
+                    </div>
+                    <p class="defects-details-comments"><strong>Comments:</strong>
+                        {{ $defect->comments ?? 'N/A' }}
+                    </p>
+                    <h4 class="area-photos-heading">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="17"
+                            height="17"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg> Area Defect Photos
+                    </h4>
+                    <div class="section-line"></div>
+                    <!-- Image grid -->
+                    <div class="image-grid">
+                        @foreach($defect->media as $image)
+                            <img src="{{ image_to_base64_storage($image->file_path) }}" alt="Defect Image">
+                        @endforeach
+                    </div>
+                @endforeach
+            @endif
         </div>
-        <div style="page-break-after: always;"></div>
     @endforeach
 </div>

@@ -1,138 +1,185 @@
-<div class="container page-break">
-    <!-- Title -->
-    <div class="page-title">STANDARDS OF PRACTICE</div>
+<style>
+    .standards-of-practice .standards-of-practice-section-title {
+        font-size: 21px;
+        margin-top: 30px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9e9e9;
+        color: #003d7a;
+        font-weight: 500;
+    }
 
-    <!-- Information Section -->
+    .standards-of-practice .standards-of-practice-sub-section-title {
+        font-size: 17px;
+        margin-top: 18px;
+        color: #0e0e0eff;
+        font-weight: 500;
+    }
+
+    .standards-of-practice .paragraph {
+        margin: 12px 0;
+        color: #3f3f3f
+    }
+
+    .standards-of-practice .list {
+        margin: 10px 0 10px 25px;
+    }
+
+    .standards-of-practice .list-item {
+        margin: 6px 0;
+        color: #3f3f3f
+    }
+
+    .standards-of-practice strong {
+        color: #444444;
+        font-size: 0.95rem;
+        font-weight: 700;
+    }
+
+    .standards-of-practice .special-link {
+        color: #212121;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .standards-of-practice .special-link:hover {
+        text-decoration: underline;
+    }
+
+    @media print {
+        .standards-of-practice .standards-of-practice-section-title,
+        .standards-of-practice .standards-of-practice-sub-section-title {
+            page-break-after: avoid;
+        }
+
+        .standards-of-practice ul,
+        .standards-of-practice p {
+            page-break-inside: avoid;
+        }
+    }
+
+</style>
+<div class="report-page-container page-break standards-of-practice" id="standardsOfPractice">
+    <div class="page-title">Inspection Standards of Practice & Scope of Service</div>
+
     <div class="section">
-        <h4><b>Inspection Details</b></h4>
-        <p>
-        2.2 The inspector shall:<br>
-        A. inspect readily accessible, visually observable, installed systems and components listed in this Standard.<br>
-        B. provide the client with a written report that states:<br>
-        1. those systems and components inspected that are, in the professional judgment of the inspector, not functioning properly, significantly deficient, unsafe, or near the end of their service lives.<br>
-        2. recommendations to correct or monitor for future correction the deficiencies reported.<br>
-        3. reasoning or explanation as to the nature of deficiencies that are not self-evident.<br>
-        4. those systems and components designated for inspection that were present but not inspected and the reason(s) they were not inspected.<br>
-        C. adhere to the ASHI Code of Ethics.
+        <h2 class="standards-of-practice-section-title">1. Introduction & Purpose</h2>
+        <p class="paragraph">
+            I wrote this paper to show the standards for the home inspection. The inspection is a non-invasive look 
+            at the systems and parts that are easy to reach in the residential property. The inspection takes place 
+            on the date of the inspection.
+        </p>
+        <p class="paragraph">
+            I will give you an overview of the property's condition and point out any defects that are visible at that time. 
+            The inspection does not cover everything and does not check for compliance with any building codes or regulations.
         </p>
 
-        <p>
-        2.3 This Standard is not intended to limit the inspector from:<br>
-        A. including other services or systems and components in addition to those required.<br>
-        B. designing or specifying repairs if qualified.<br>
-        C. excluding systems or components if requested by the client.
+        <h2 class="standards-of-practice-section-title">2. The Inspector's Responsibilities</h2>
+
+        <h3 class="standards-of-practice-sub-section-title">2.1 Perform a Visual Evaluation</h3>
+        <p class="paragraph">
+            The inspector shall evaluate readily accessible and visible installed systems and components listed in these standards.
         </p>
 
-        <h5><b>Roofing</b></h5>
-        <p>
-        5.1 The inspector shall:<br>
-        A. inspect roofing materials, roof drainage systems, flashing, skylights, chimneys, and roof penetrations.<br>
-        B. describe roofing materials and methods used to inspect the roofing.
-        </p>
-        <p>
-        5.2 The inspector is NOT required to inspect antennas, interiors of vent systems and chimneys not readily accessible, and other installed accessories.
+        <h3 class="standards-of-practice-sub-section-title">2.2 Provide a Written Report</h3>
+        <p class="paragraph">The report will clearly document:</p>
+        <ul class="list">
+            <li class="list-item">Systems and components that do not work properly or are significantly deficient, unsafe, or near the end of their service life.</li>
+            <li class="list-item">Recommendations to correct, monitor, or further evaluate reported deficiencies.</li>
+            <li class="list-item">The reasoning behind any deficiencies that are not self-evident.</li>
+            <li class="list-item">Any systems designated for evaluation but not evaluated, along with the reason.</li>
+        </ul>
+
+        <h3 class="standards-of-practice-sub-section-title">2.3 Maintain Professional Ethics</h3>
+        <p class="paragraph">
+            The inspector will conduct the inspection with honesty, integrity, and objectivity, avoiding conflicts of interest.
         </p>
 
-        <h5><b>Exterior</b></h5>
-        <p>
-        4.1 The inspector shall inspect wall coverings, flashing, trim, exterior doors, decks, balconies, stoops, steps, porches, railings, eaves, soffits, fascias, vegetation, grading, surface drainage, retaining walls, walkways, patios, and driveways.<br>
-        B. describe wall coverings.
-        </p>
-        <p>
-        4.2 The inspector is NOT required to inspect screening, shutters, awnings, fences, geological conditions, recreational facilities, outbuildings (except garages), seawalls, docks, erosion control systems.
+        <p class="paragraph">
+            The inspector may add services, list repairs if qualified, or omit systems at the client's request.
         </p>
 
-        <h5><b>Interiors</b></h5>
-        <p>
-        10.1 The inspector shall inspect walls, ceilings, floors, stairways, railings, cabinets, countertops, doors, windows, garage vehicle doors and operators, and installed kitchen appliances using normal operating controls.
-        </p>
-        <p>
-        10.2 The inspector is NOT required to inspect paint, wallpaper, floor coverings, window treatments, glass seal failures, central vacuum systems, recreation facilities, unlisted appliances, or every feature of an appliance.
+        <h2 class="standards-of-practice-section-title">3. Scope of the Inspection: What the Inspection Covers</h2>
+
+        <h3 class="standards-of-practice-sub-section-title">3.1 Structural Components</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Foundation, floor, wall, ceiling, and roof structure.</p>
+        <p class="paragraph"><strong>Documented:</strong> Methods used to evaluate crawlspaces and attics, foundation type, and framing observed.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Engineering analysis, structural adequacy opinions, unsafe crawlspaces, walking attic framing covered by insulation.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.2 Exterior</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Wall coverings, flashing, trim, exterior doors, decks, porches, steps, railings, eaves, soffits, fascias, grading, drainage, retaining walls affecting structure.</p>
+        <p class="paragraph"><strong>Documented:</strong> Types of exterior wall coverings.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Fences, geology, recreational facilities, detached structures (except garages), awnings, shutters.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.3 Roofing</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Roofing materials, gutters, downspouts, flashing, skylights, chimneys, roof penetrations.</p>
+        <p class="paragraph"><strong>Documented:</strong> Roofing materials and inspection method (ground, ladder, drone).</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Antennas, interiors of flues/chimneys, other accessories.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.4 Plumbing System</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Water supply/distribution, fixtures, drains, vents, water heater, fuel storage systems.</p>
+        <p class="paragraph"><strong>Documented:</strong> Piping materials, water heater type/energy source, shut-off valve location.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Wells, septic, water quality, pressure tests, irrigation systems, inaccessible flues.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.5 Electrical System</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Service entrance, main/sub-panels, grounding, overcurrent protection, fixtures, switches, receptacles.</p>
+        <p class="paragraph"><strong>Documented:</strong> Amperage, main disconnect locations, presence of smoke/CO alarms, wiring method.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Security systems, low-voltage wiring, solar systems, voltage/amperage measurements.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.6 Heating System</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Heating equipment, vents, flues, chimneys.</p>
+        <p class="paragraph"><strong>Documented:</strong> Heating method and energy source.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Interior surfaces of heat exchangers/flues, heat adequacy, humidifiers, air cleaners.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.7 Air Conditioning System</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Permanently installed cooling systems and distribution.</p>
+        <p class="paragraph"><strong>Documented:</strong> Cooling method and energy source.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Cooling adequacy, window units, electronic air cleaners.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.8 Interior</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Walls, ceilings, floors, stairs, railings, countertops, cabinets (sample), doors, windows, installed kitchen appliances.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Paint, wallpaper, floor coverings, window treatments, full appliance features.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.9 Insulation & Ventilation</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Insulation and vapor retarders in unfinished areas; attic/foundation ventilation; exhaust systems.</p>
+        <p class="paragraph"><strong>Documented:</strong> Types of insulation/vapor barriers; areas lacking insulation.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Disturbing insulation.</p>
+
+        <h3 class="standards-of-practice-sub-section-title">3.10 Fireplaces & Fuel-Burning Appliances</h3>
+        <p class="paragraph"><strong>Evaluated:</strong> Fireplaces, stoves, inserts, chimneys, vent systems.</p>
+        <p class="paragraph"><strong>Documented:</strong> System types and components evaluated.</p>
+        <p class="paragraph"><strong>Outside the Scope of Inspection:</strong> Flue interiors, draft testing, moving inserts.</p>
+
+        <h2 class="standards-of-practice-section-title">4. General Limitations & Exclusions</h2>
+        <p class="paragraph">
+            I understand that the home inspection is not a technical evaluation. The inspector is not required to:
         </p>
 
-        <h5><b>Structural Components</b></h5>
-        <p>
-        3.1 The inspector shall inspect structural components including foundation and framing and describe inspection methods and the structural elements.
-        </p>
-        <p>
-        3.2 The inspector is NOT required to provide engineering services, offer structural adequacy opinions, enter low-clearance crawlspaces, or traverse concealed attic load-bearing components.
-        </p>
+        <ul class="list">
+            <li class="list-item">Determine the condition of concealed or inaccessible systems.</li>
+            <li class="list-item">Provide opinions on lifespan, adequacy, strength, or efficiency of systems.</li>
+            <li class="list-item">Determine causes of conditions or estimate repair methods/costs.</li>
+            <li class="list-item">Predict future failures or conditions.</li>
+            <li class="list-item">Identify cosmetic imperfections.</li>
+            <li class="list-item">Perform unsafe actions or anything not stated in this Standard.</li>
+        </ul>
 
-        <h5><b>Insulation and Ventilation</b></h5>
-        <p>
-        11.1 The inspector shall inspect insulation and vapor retarders, attic and foundation ventilation, exhaust systems, and dryer exhausts, and describe insulation/vapor retarders and note areas without insulation.
-        </p>
-        <p>
-        11.2 The inspector is NOT required to disturb insulation.
-        </p>
 
-        <h5><b>Air Conditioning – 1st Floor</b></h5>
-        <p>
-        9.1 The inspector shall open access panels, inspect cooling equipment and distribution, and describe energy sources and cooling systems.
-        </p>
-        <p>
-        9.2 The inspector is NOT required to inspect electric air cleaners, determine cooling adequacy, inspect portable units or renewable cooling systems.
-        </p>
+        <div class="instructions">
+            <h2 class="standards-of-practice-section-title">* Verified Industry Guidelines & External References</h2>
 
-        <h5><b>Air Conditioning – 2nd Floor</b></h5>
-        <p>
-        (Same requirements as 1st floor.)
-        </p>
+            <p class="paragraph">
+                For clients who wish to review widely recognized home inspection standards, reputable organizations such as the 
+                American Society of Home Inspectors (ASHI) publish detailed guidelines that outline the general scope of a 
+                professional home inspection. These external standards are not part of this report and are provided solely for 
+                informational purposes.
+            </p>
 
-        <h5><b>Heating</b></h5>
-        <p>
-        8.1 The inspector shall open access panels, inspect heating equipment, vents, flues, chimneys, and distribution, and describe energy sources and heating systems.
-        </p>
-        <p>
-        8.2 The inspector is NOT required to inspect vent interiors, heat exchangers, humidifiers, air cleaners, renewable energy heating systems, heat-recovery systems, or determine heat adequacy or combustion air adequacy.
-        </p>
-
-        <h5><b>Plumbing</b></h5>
-        <p>
-        6.1 The inspector shall inspect interior water supply, distribution, fixtures, drains, vents, water heating, vent systems, fuel systems, sewage ejectors, and sump pumps, and describe piping materials, water heaters, and shut-off valve locations.
-        </p>
-        <p>
-        6.2 The inspector is NOT required to inspect washing machine connections, inaccessible vent systems, wells, conditioning systems, renewable energy water heaters, fire systems, irrigation systems, septic systems, or determine water quality or supply pressure.
-        </p>
-
-        <h5><b>Electrical</b></h5>
-        <p>
-        7.1 The inspector shall inspect service drop, entrance conductors, panels, grounding, conductors, overcurrent devices, lighting fixtures, switches, receptacles, GFCIs, and AFCIs, and describe service amperage, disconnect locations, alarms, and wiring method.
-        </p>
-        <p>
-        7.2 The inspector is NOT required to inspect remote devices, alarms, security systems, low-voltage wiring, ancillary systems, renewable energy systems, or measure amperage/voltage.
-        </p>
-
-        <h5><b>Fireplaces and Fuel-Burning Appliances</b></h5>
-        <p>
-        12.1 The inspector shall inspect fireplaces, stoves, inserts, accessories, chimneys, and vent systems, and describe them.
-        </p>
-        <p>
-        12.2 The inspector is NOT required to inspect vent interiors, screens, doors, seals, gaskets, automatic feed devices, mantles, surrounds, combustion air, heat distribution assists, outdoor fireplaces, or draft characteristics.
-        </p>
-
-        <h5><b>Built-in Appliances</b></h5>
-        <p>
-        13.1 The inspector shall inspect installed ovens, ranges, cooktops, microwaves, dishwashers, and food waste grinders using normal controls.
-        </p>
-        <p>
-        13.2 The inspector is NOT required to inspect unlisted appliances, thermostats, heating elements, self-clean cycles, lights, timers, clocks, or specialized features.
-        </p>
-
-        <h5><b>Scope and Limitations</b></h5>
-        <p>
-        General limitations: the inspector is NOT required to perform actions, determine conditions, or make recommendations not in the Standard. Inspections are not exhaustive and do not identify concealed defects or cosmetic issues. The Standard applies to buildings with four or fewer units.
-        </p>
-
-        <h5><b>General Exclusions</b></h5>
-        <p>
-        The inspector is NOT required to determine conditions of inaccessible systems, life expectancy, adequacy, causes, correction methods, future conditions, suitability, code compliance, market value, environmental hazards, operating costs, acoustics, soil conditions, recalls, or perform any unlawful or professional services beyond home inspection.
-        </p>
-        <p>
-        The inspector is NOT required to operate shut-down systems, unresponsive systems, shut-off valves, or safety controls, enter dangerous or inaccessible areas, inspect underground items, decorative items, detached structures (except garages), common areas, or every occurrence of similar components.
-        </p>
-        <p>
-        The inspector is NOT required to perform dangerous procedures, describe uninspected systems, move objects, dismantle systems except as required, reset or reprogram devices, ignite fires or burners, or probe surfaces that would be damaged.
-        </p>
+            <p class="paragraph">
+                You may access the official ASHI Standards of Practice at the following link:<br>
+                <a class="special-link" href="https://www.homeinspector.org/Resources/Standard-of-Practice/" target="_blank">
+                    https://www.homeinspector.org/Resources/Standard-of-Practice/
+                </a>
+            </p>
+        </div>
     </div>
 </div>

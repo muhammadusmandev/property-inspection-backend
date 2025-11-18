@@ -60,15 +60,15 @@
     }
 
     .checklist-item {
-        padding: 12px;
+        padding: 12px 30px;
         background-color: #fafafa;
-        border-left: 3px solid #005fa3;
+        border-left: 5px solid #61bdff;
     }
 
     .question {
-        font-weight: 600;
+        font-weight: 500;
         color: #333;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         font-size: 17px;
     }
 
@@ -77,7 +77,7 @@
         font-size: 19px;
     }
 </style>
-<div class="container page-break">
+<div class="report-page-container page-break" id="checklist">
     <!-- Title -->
     <div class="page-title">CHECKLIST</div>
 
