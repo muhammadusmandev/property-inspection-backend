@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Cashier\Billable;
+use Storage;
 
 class User extends Authenticatable
 {
@@ -81,6 +82,15 @@ class User extends Authenticatable
                 $user->uuid = (string) Str::uuid();
             }
         });
+
+        static::deleting(function ($user) {
+            $media = $user->media;
+            if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+                Storage::disk('public')->delete($media->file_path);
+            }
+
+            $media->delete();
+        });
     }
 
     /**
@@ -132,5 +142,13 @@ class User extends Authenticatable
     public function realtor()
     {
         return $this->belongsTo(self::class, 'realtor_id');
+    }
+
+    /**
+     * User have media.
+     */
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
     }
 }

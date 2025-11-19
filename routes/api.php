@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
 use App\Http\Controllers\Api\Media\MediaController;
 use App\Http\Controllers\Api\Billing\BillingController;
 use App\Http\Controllers\Api\Dashboard\DashboardController;
+use App\Http\Controllers\Api\Settings\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -65,6 +66,11 @@ Route::prefix('v1')->group(function () {
         Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
         Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
         Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);
+
+        Route::prefix('settings')->group(function () {
+            Route::get('/profile', [ProfileController::class, 'getProfile']);
+            Route::post('/update-profile', [ProfileController::class, 'updateProfile']);
+        });
     });
 
 });
