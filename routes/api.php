@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
 use App\Http\Controllers\Api\Media\MediaController;
 use App\Http\Controllers\Api\Billing\BillingController;
+use App\Http\Controllers\Api\Dashboard\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\{
@@ -44,6 +45,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/auth/user', function (Request $request) {
             return $request->user();
         });
+        Route::get('dashboard', [DashboardController::class, 'index']);
         Route::apiResource('properties', PropertyController::class);
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
