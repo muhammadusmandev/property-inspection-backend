@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\Contracts\ProfileService as ProfileServiceContract;
+use App\Repositories\Contracts\ForgotPasswordRepository as ForgotPasswordRepositoryContract;
 use Intervention\Image\Laravel\Facades\Image;
 use \Illuminate\Http\UploadedFile;
 use App\Resources\{ ProfileResource };
@@ -11,6 +12,17 @@ use DB;
 
 class ProfileService implements ProfileServiceContract
 {
+    protected $forgotPasswordRepository;
+
+    /**
+     * Inject ForgotPasswordRepository via constructor.
+     * @param \App\Repositories\Contracts\ForgotPasswordRepositoryContract $forgotPasswordRepository
+    */
+    public function __construct(ForgotPasswordRepositoryContract $forgotPasswordRepository)
+    {
+        $this->forgotPasswordRepository = $forgotPasswordRepository;
+    }
+
     /**
      * Get profile data
      *
@@ -81,6 +93,25 @@ class ProfileService implements ProfileServiceContract
 
         $user->profile_photo = null;
         $user->update();
+    }
+
+    /**
+     * Reset Password
+     *
+     * @param array $data
+     * 
+     * @return void
+     * 
+     */
+    public function resetPassword(array $data): void
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            throw new \Exception('Oops! You are not authenticated');
+        }
+
+        $this->forgotPasswordRepository->attemptResetPassword($user->email, $data['password']);
     }
 
     /**

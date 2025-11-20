@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use App\Requests\UpdateProfileRequest;
+use App\Requests\{ UpdateProfileRequest, SettingPasswordResetRequest };
 use App\Services\Contracts\ProfileService as ProfileServiceContract;
 use App\Traits\{ Loggable, ApiJsonResponse };
 
@@ -81,6 +81,28 @@ class ProfileController extends Controller
             return $this->successResponse('Profile Photo deleted successfully.');
         } catch (\Exception $e) {
             $this->logException($e, 'Profile Photo delete Failed.');
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Reset password.
+     * 
+     * @param  \App\Http\Requests\SettingPasswordResetRequest  $request
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function resetPassword(SettingPasswordResetRequest $request): JsonResponse
+    {
+        try {
+            $this->profileService->resetPassword($request->validated());
+            return $this->successResponse(__('validationMessages.resource_updated_successfully'));
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Password Reset']));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);
