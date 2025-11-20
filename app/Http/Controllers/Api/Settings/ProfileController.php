@@ -5,22 +5,22 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use App\Requests\UpdateProfileRequest;
-use App\Services\Contracts\SettingsService as SettingsServiceContract;
+use App\Services\Contracts\ProfileService as ProfileServiceContract;
 use App\Traits\{ Loggable, ApiJsonResponse };
 
 class ProfileController extends Controller
 {
     use Loggable, ApiJsonResponse;
 
-    protected $settingsService;
+    protected $profileService;
 
     /**
-     * Inject SettingsServiceContract via constructor.
-     * @param \App\Services\Contracts\SettingsService $settingsService
+     * Inject ProfileServiceContract via constructor.
+     * @param \App\Services\Contracts\ProfileService $profileService
     */
-    public function __construct(SettingsServiceContract $settingsService)
+    public function __construct(ProfileServiceContract $profileService)
     {
-        $this->settingsService = $settingsService;
+        $this->profileService = $profileService;
     }
 
     /**
@@ -33,7 +33,7 @@ class ProfileController extends Controller
     public function getProfile(): JsonResponse
     {
         try {
-            $data = $this->settingsService->getProfileData();
+            $data = $this->profileService->getProfileData();
             return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
 
         } catch (\Exception $e) {
@@ -57,10 +57,30 @@ class ProfileController extends Controller
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         try {
-            $data = $this->settingsService->updateProfileData($request->validated());
+            $data = $this->profileService->updateProfileData($request->validated());
             return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
         } catch (\Exception $e) {
             $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Profile Data']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete profile photo.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     */
+    public function deleteProfilePhoto(): JsonResponse
+    {
+        try {
+            $this->profileService->deleteProfilePhoto();
+            return $this->successResponse('Profile Photo deleted successfully.');
+        } catch (\Exception $e) {
+            $this->logException($e, 'Profile Photo delete Failed.');
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);

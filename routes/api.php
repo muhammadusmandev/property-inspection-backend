@@ -70,6 +70,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('settings')->group(function () {
             Route::get('/profile', [ProfileController::class, 'getProfile']);
             Route::post('/update-profile', [ProfileController::class, 'updateProfile']);
+            Route::delete('/delete-profile-photo', [ProfileController::class, 'deleteProfilePhoto']);
         });
     });
 

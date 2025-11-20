@@ -4,7 +4,7 @@ namespace App\Services\Contracts;
 
 use App\Resources\ProfileResource;
 
-interface SettingsService
+interface ProfileService
 {
     /**
      * Get profile data
@@ -23,4 +23,12 @@ interface SettingsService
      * 
      */
     public function updateProfileData(array $data): ProfileResource;
+
+    /**
+     * delete profile photo
+     *
+     * @return void
+     * 
+     */
+    public function deleteProfilePhoto(): void;
 }

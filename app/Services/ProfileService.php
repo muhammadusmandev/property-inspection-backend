@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Services\Contracts\SettingsService as SettingsServiceContract;
+use App\Services\Contracts\ProfileService as ProfileServiceContract;
 use Intervention\Image\Laravel\Facades\Image;
 use \Illuminate\Http\UploadedFile;
 use App\Resources\{ ProfileResource };
 use Storage;
 use DB;
 
-class SettingsService implements SettingsServiceContract
+class ProfileService implements ProfileServiceContract
 {
     /**
      * Get profile data
@@ -40,6 +40,10 @@ class SettingsService implements SettingsServiceContract
     {
         $user = auth()->user();
 
+        if (!$user) {
+            throw new \Exception('Oops! You are not authenticated');
+        }
+
         $user->bio = $data['bio'];
 
         if(isset($data['photo'])){
@@ -49,11 +53,34 @@ class SettingsService implements SettingsServiceContract
 
         $user->update();
 
+        return new ProfileResource($user);
+    }
+
+    /**
+     * delete profile photo
+     *
+     * @return void
+     * 
+     */
+    public function deleteProfilePhoto(): void
+    {
+        $user = auth()->user();
+
         if (!$user) {
             throw new \Exception('Oops! You are not authenticated');
         }
 
-        return new ProfileResource($user);
+        $photo = $user->media()->first();
+
+        if ($photo) {
+            if ($photo->file_path && Storage::disk('public')->exists($photo->file_path)) {
+                Storage::disk('public')->delete($photo->file_path);
+            }
+            $photo->delete();
+        }
+
+        $user->profile_photo = null;
+        $user->update();
     }
 
     /**
@@ -90,7 +117,7 @@ class SettingsService implements SettingsServiceContract
 
                 // Delete old media manually
                 $oldPhoto = $user->media()->first();
-                
+
                 if ($oldPhoto) {
                     if ($oldPhoto->file_path && Storage::disk('public')->exists($oldPhoto->file_path)) {
                         Storage::disk('public')->delete($oldPhoto->file_path);
