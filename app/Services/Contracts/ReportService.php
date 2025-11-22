@@ -15,5 +15,5 @@ interface ReportService
     public function updateReport(int $id, array $data): Report;
     // public function saveMedia($model, $files);
     public function updateReportChecklist(array $data);
-    public function markReportLocked(int $id): void;
+    public function generateReport(int $id): void;
 }

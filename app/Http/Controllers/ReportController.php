@@ -3,83 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\Contracts\GenerateReportService as GenerateReportServiceContract;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\Browsershot\Browsershot;
+use App\Jobs\GenerateInspectionReport;
 use App\Models\Report;
+use Storage;
 
 class ReportController extends Controller
 {
-    public function downloadReportPDF($report_id)
+    protected GenerateReportServiceContract $generateReportService;
+
+    /**
+     * Inject GenerateReportServiceContract.
+     */
+    public function __construct(GenerateReportServiceContract $generateReportService)
     {
-        $report = Report::select([
-                    'id', 'property_id', 'template_id', 'user_id', 'title', 'type', 'report_date'
-                ])
-                ->with([
-                    'areas' => function ($query) {
-                        $query->latest()
-                            ->select(['id', 'report_id', 'name', 'condition', 'cleanliness', 'description']);
-                    },
-                    'areas.items' => function ($query) {
-                        $query->select(['id', 'report_inspection_area_id', 'name']);
-                    },
-                    'areas.media' => function ($query) {
-                        $query->select(['id', 'mediable_id', 'file_path']);
-                    },
-                    'areas.defects' => function ($query) {
-                        $query->select(['id', 'report_inspection_area_id', 'inspection_area_item_id', 'defect_type', 'remediation', 'priority', 'comments'])
-                        ->with(['item:id,name']);
-                    },
-                    'areas.defects.media' => function ($query) {
-                        $query->select(['id', 'mediable_id', 'file_path']);
-                    },
-                ])
-                ->find($report_id);
-
-        $report->checklist = $report->checklistItemsWithStatus();
-
-        return Pdf::view('reports.report_v1', [
-                'report' => $report
-            ])
-            ->headerHtml(view('reports.partials.header')->render())
-            ->footerHtml(view('reports.partials.footer')->render())
-            ->margins(15, 5, 20, 5)
-            ->format('A4')
-            ->withBrowsershot(function (Browsershot $shot) {
-                $shot->setOption('printBackground', true);
-            })
-            ->download('inspection.pdf');
+        $this->generateReportService = $generateReportService;
     }
 
-    public function viewgenerateReport($report_id)
+    /**
+     * Download report pdf.
+     * 
+     * @param int $report_id
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     */
+    public function saveReportPDF($report_id)
     {
-        $report = Report::select([
-                    'id', 'property_id', 'template_id', 'user_id', 'title', 'type', 'report_date'
-                ])
-                ->with([
-                    'areas' => function ($query) {
-                        $query->latest()
-                            ->select(['id', 'report_id', 'name', 'condition', 'cleanliness', 'description']);
-                    },
-                    'areas.items' => function ($query) {
-                        $query->select(['id', 'report_inspection_area_id', 'name']);
-                    },
-                    'areas.media' => function ($query) {
-                        $query->select(['id', 'mediable_id', 'file_path']);
-                    },
-                    'property' => function ($query) {
-                        $query->select(['id', 'client_id', 'address', 'address_2', 'city', 'state', 'country', 'postal_code', 'type']);
-                    },
-                    'property.client' => function ($query) {
-                        $query->select(['id', 'name', 'email', 'phone_number']);
-                    },
-                    'user' => function ($query) {
-                        $query->select(['id', 'name', 'email', 'phone_number']);
-                    },
-                ])
-                ->find($report_id);
+        $pdfName = $this->generateReportService->savePdfReport($report_id);
+        $downloadUrl = route('reports.download', ['file' => $pdfName]);
+        Report::where('id', $report_id)->update(['download_link' => $downloadUrl]);
+        echo "Pdf saved successfully: " . $downloadUrl;
+    }
 
-        $report->checklist = $report->checklistItemsWithStatus();
+    /**
+     * View report pdf.
+     * 
+     * @param int $report_id
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     */
+    public function viewReport($report_id)
+    {
+        $report = $this->generateReportService->getReportData($report_id);
 
         return view('reports.report_v1', ['report' => $report]);
+    }
+
+    public function downloadReport($file)
+    {
+        $path = 'reports/' . $file;
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->download(storage_path('app/public/' . $path));
     }
 }

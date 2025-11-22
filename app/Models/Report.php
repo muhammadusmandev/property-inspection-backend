@@ -21,6 +21,32 @@ class Report extends Model
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'uuid' => 'string',
+        ];
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->uuid)) {
+                $user->uuid = (string) \Str::uuid();
+            }
+        });
+    }
+
+    /**
      * property belongs to a user (realtor/inspector).
      */
 

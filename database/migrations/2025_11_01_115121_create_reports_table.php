@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('property_id')->nullable()->constrained('properties')->nullOnDelete();
             $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();

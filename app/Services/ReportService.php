@@ -8,11 +8,12 @@ use App\Models\ReportInspectionAreaItem;
 use App\Models\Template;
 use App\Resources\ReportResource;
 use App\Services\Contracts\ReportService as ReportServiceContract;
-use Auth;
-use DB;
+use App\Jobs\GenerateInspectionReport;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Storage;
+use Auth;
+use DB;
 
 class ReportService implements ReportServiceContract
 {
@@ -272,10 +273,10 @@ class ReportService implements ReportServiceContract
     }
 
     /**
-     * Mark report lock
+     * generate report and mark it locked/non-editable
      * @param int $id
      */
-    public function markReportLocked(int $id): void
+    public function generateReport(int $id): void
     {
         $report = Report::find($id);
 
@@ -289,6 +290,8 @@ class ReportService implements ReportServiceContract
 
         $report->locked_at = now();
         $report->update();
+
+        GenerateInspectionReport::dispatch($report->id);
     }
 }
 

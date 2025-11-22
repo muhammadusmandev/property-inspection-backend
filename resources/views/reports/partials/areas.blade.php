@@ -169,21 +169,6 @@
 </style>
 
 <div class="report-page-container page-break">
-    @php
-        function image_to_base64_storage($path)
-        {
-            $fullPath = storage_path('app/public/' . $path);
-
-            if (!file_exists($fullPath)) {
-                return null;
-            }
-
-            $mime = mime_content_type($fullPath);
-            $data = base64_encode(file_get_contents($fullPath));
-
-            return "data:$mime;base64,$data";
-        }
-    @endphp
     <!-- Title -->
     <h2 class="page-title" id="inspectionArea">Inspection Areas</h2>
     @foreach($report->areas as $area)
@@ -250,8 +235,8 @@
             <!-- Image grid -->
             <div class="image-grid">
                 @if(isset($area->media) && count($area->media) > 0)
-                    @foreach($area->media as $media)
-                        <img src="{{ image_to_base64_storage($media->file_path) }}" alt="Area Image">
+                    @foreach($area->media as $media) 
+                        <img src="{{ image_to_base64_by_path(public_path('storage/' . $media->file_path)) }}" alt="Area Image">
                     @endforeach
                 @endif
             </div>
@@ -307,7 +292,7 @@
                     <!-- Image grid -->
                     <div class="image-grid">
                         @foreach($defect->media as $image)
-                            <img src="{{ image_to_base64_storage($image->file_path) }}" alt="Defect Image">
+                            <img src="{{ image_to_base64_by_path(public_path('storage/' . $image->file_path)) }}" alt="Defect Image">
                         @endforeach
                     </div>
                 @endforeach

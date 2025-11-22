@@ -72,6 +72,10 @@ return [
     'property' => [
         'exists' => 'Property not found'
     ],
+    'report' => [
+        'report_generated_success' => 'Report generated successfully.',
+        'report_generated_failure' => 'Report generate failed.'
+    ],
     'data_fetch_success' => 'Data fetched successfully.',
     'action_done_success' => 'Action done successfully.',
     'already_subscribe_but_try_billing' => 'You have already subscribed. Cannot access free trail page again.'

@@ -160,15 +160,15 @@ class ReportController extends Controller
     }
 
     /**
-     * Update an existing report.
+     * generate and lock/non-editable report.
      */
-    public function markReportLocked(int $id): JsonResponse
+    public function generateReport(int $id): JsonResponse
     {
         try {
-            $data = $this->reportService->markReportLocked($id);
-            return $this->successResponse(__('validationMessages.resource_updated_successfully'), $data);
+            $data = $this->reportService->generateReport($id);
+            return $this->successResponse(__('validationMessages.report.report_generated_success'), $data);
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.resource_update_failed', ['resource' => 'Report']));
+            $this->logException($e, __('validationMessages.report_generated_failure'));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);

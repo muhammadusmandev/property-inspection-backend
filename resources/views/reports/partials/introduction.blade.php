@@ -220,7 +220,7 @@
         <div class="header-diagonal-bg"></div>
         <div class="header-content">
             <div class="header-left">
-                <img src="{{ image_to_base64('images/Inspexly_logo.jpg') }}" width="200" alt="Inspexly Logo" style="display: inline-block; margin-bottom: 10px">
+                <img src="{{ image_to_base64_by_path(public_path('images/Inspexly_logo.jpg')) }}" width="200" alt="Inspexly Logo" style="display: inline-block; margin-bottom: 10px">
                 <div class="report-type">
                     <span class="report-type-sub">Report Type</span>
                     <span class="report-type-main">{{$report->type}}</span>
@@ -329,7 +329,7 @@
             <!-- Images Section -->
             <div class="details-section">
                 <div class="intro-image">
-                    <img src="{{ image_to_base64('images/report_5.jpg') }}" width="100%" height="100%" alt="Report Image">
+                    <img src="{{ image_to_base64_by_path(public_path('images/report_5.jpg')) }}" width="100%" height="100%" alt="Report Image">
                 </div>
             </div> 
         </div>
@@ -372,25 +372,9 @@
         </div>
     </div>
 
-    @php
-        function image_to_base64($path)
-        {
-            $fullPath = public_path($path);
-
-            if (!file_exists($fullPath)) {
-                return null;
-            }
-
-            $mime = mime_content_type($fullPath);
-            $data = base64_encode(file_get_contents($fullPath));
-
-            return "data:$mime;base64,$data";
-        }
-    @endphp
-
     <!-- Footer -->
     <div class="introduction-footer">
-        <img src="{{ image_to_base64('images/Inspexly_logo.jpg') }}" width="150" alt="Inspexly Logo" style="display: inline-block; margin-top: 20px">
+        <img src="{{ image_to_base64_by_path(public_path('images/Inspexly_logo.jpg')) }}" width="150" alt="Inspexly Logo" style="display: inline-block; margin-top: 20px">
         <a href="https://www.inspexly.com" class="footer-website">https://www.inspexly.com</a>
         <p>Report created with Inspexly | All rights are reserved</p>
     </div>

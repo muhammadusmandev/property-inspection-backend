@@ -25,6 +25,7 @@ class ReportResource extends JsonResource
             'type' => $this->type,
             'report_date' => $this->report_date,
             'locked_at' => $this->locked_at,
+            'download_link' => $this->download_link,
             'property' => $this->property,
             'template' => $this->template,
             'areas' => ReportAreaResource::collection($this->whenLoaded('areas')) ?? [],
