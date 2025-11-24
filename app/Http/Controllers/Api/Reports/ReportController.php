@@ -160,15 +160,33 @@ class ReportController extends Controller
     }
 
     /**
-     * generate and lock/non-editable report.
+     * Generate and lock/non-editable report.
+     * @param int $id
      */
     public function generateReport(int $id): JsonResponse
     {
         try {
             $data = $this->reportService->generateReport($id);
-            return $this->successResponse(__('validationMessages.report.report_generated_success'), $data);
+            return $this->successResponse(__('validationMessages.report.report_generation_queued'), $data);
         } catch (\Exception $e) {
-            $this->logException($e, __('validationMessages.report_generated_failure'));
+            $this->logException($e, __('validationMessages.report.report_generated_failure'));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Check report status for report (Todo: Temp for polling need implement realtime).
+     * @param int $id
+     */
+    public function checkReportStatus(int $id): JsonResponse
+    {
+        try {
+            $data = $this->reportService->checkReportStatus($id);
+            return $this->successResponse(__('validationMessages.report.report_status_success'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.report.report_status_failure'));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);

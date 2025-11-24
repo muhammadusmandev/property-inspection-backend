@@ -73,7 +73,7 @@ return [
         'exists' => 'Property not found'
     ],
     'report' => [
-        'report_generated_success' => 'Report generated successfully.',
+        'report_generation_queued' => 'Report generation queued successfully.',
         'report_generated_failure' => 'Report generate failed.'
     ],
     'data_fetch_success' => 'Data fetched successfully.',

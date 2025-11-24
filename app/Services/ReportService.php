@@ -275,8 +275,9 @@ class ReportService implements ReportServiceContract
     /**
      * generate report and mark it locked/non-editable
      * @param int $id
+     * @return Report $report
      */
-    public function generateReport(int $id): void
+    public function generateReport(int $id): Report
     {
         $report = Report::find($id);
 
@@ -288,10 +289,32 @@ class ReportService implements ReportServiceContract
             throw new AuthorizationException('Unauthorized access.');
         }
 
-        $report->locked_at = now();
+        $report->status = 'in_progress';
         $report->update();
 
         GenerateInspectionReport::dispatch($report->id);
+
+        return $report;
+    }
+
+    /**
+     * Check report status
+     * @param int $id
+     * @return array []
+     */
+    public function checkReportStatus(int $id): array
+    {
+        $report = Report::find($id);
+
+        if (!$report) {
+            throw new \Exception('Report not found.');
+        }
+
+        if ($report->user_id !== Auth::id()) {
+            throw new AuthorizationException('Unauthorized access.');
+        }
+        
+        return ['status' => $report->status];
     }
 }
 

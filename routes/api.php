@@ -63,6 +63,7 @@ Route::prefix('v1')->group(function () {
         Route::post('report-inspection-area-defects/{id}', [ReportInspectionAreaDefectController::class, 'updateDefect']);
         Route::put('update-report-inspection-checklist', [ReportController::class, 'updateCheckList']);
         Route::put('generate-report/{id}', [ReportController::class, 'generateReport']);
+        Route::get('check-report-status/{id}', [ReportController::class, 'checkReportStatus']);
         Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
         Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
         Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);

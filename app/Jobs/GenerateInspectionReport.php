@@ -32,6 +32,10 @@ class GenerateInspectionReport implements ShouldQueue
     {
         $pdfName = $generateReportService->savePdfReport($this->report_id);
         $downloadUrl = route('reports.download', ['file' => $pdfName]);
-        Report::where('id', $this->report_id)->update(['download_link' => $downloadUrl]);
+        Report::where('id', $this->report_id)->update([
+            'download_link' => $downloadUrl,
+            'locked_at' => now(),
+            'status' => 'completed'
+        ]);
     }
 }
