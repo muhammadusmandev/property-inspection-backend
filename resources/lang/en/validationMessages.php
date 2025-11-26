@@ -78,5 +78,6 @@ return [
     ],
     'data_fetch_success' => 'Data fetched successfully.',
     'action_done_success' => 'Action done successfully.',
+    'action_failed' => 'Action failed.',
     'already_subscribe_but_try_billing' => 'You have already subscribed. Cannot access free trail page again.'
 ];

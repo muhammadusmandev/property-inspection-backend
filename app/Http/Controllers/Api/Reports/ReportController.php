@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Reports;
 
 use App\Http\Controllers\Controller;
-use App\Requests\{ StoreReportRequest, UpdateReportRequest, UpdateReportChecklistRequest };
+use App\Requests\{ StoreReportRequest, UpdateReportRequest, UpdateReportChecklistRequest, SaveReportSignatureRequest };
 use App\Traits\ApiJsonResponse;
 use App\Traits\Loggable;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -75,7 +75,7 @@ class ReportController extends Controller
     /**
      * Show report details.
      */
-    public function show(int $id): JsonResponse
+    public function show(int|string $id): JsonResponse
     {
         try {
             $data = $this->reportService->showReport($id);
@@ -187,6 +187,27 @@ class ReportController extends Controller
             return $this->successResponse(__('validationMessages.report.report_status_success'), $data);
         } catch (\Exception $e) {
             $this->logException($e, __('validationMessages.report.report_status_failure'));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Save report Signature.
+     * 
+     * @param string $id
+     * @param SaveReportSignatureRequest $request
+     * @return JsonResponse
+     * 
+     */
+    public function saveReportSignature(SaveReportSignatureRequest $request, string $id): JsonResponse
+    {
+        try {
+            $data = $this->reportService->saveReportSignature($id, $request->validated());
+            return $this->successResponse(__('validationMessages.action_done_success'), $data);
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.action_failed'));
             return $this->errorResponse(__('validationMessages.something_went_wrong'), [
                 'error' => $e->getMessage(),
             ], 500);

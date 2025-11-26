@@ -122,7 +122,7 @@ class ReportService implements ReportServiceContract
 
     }
 
-    public function showReport(int $id): ReportResource
+    public function showReport(int|string $id): ReportResource
     {
         $report = Report::with([
             'areas' => function ($query) {
@@ -130,7 +130,10 @@ class ReportService implements ReportServiceContract
             },
             'areas.items',
             'areas.defects'
-        ])->find($id);
+        ])
+        ->where('id', $id)
+        ->orWhere('uuid', $id)
+        ->first();
         return new ReportResource($report);
 
     }
@@ -315,6 +318,49 @@ class ReportService implements ReportServiceContract
         }
         
         return ['status' => $report->status];
+    }
+
+    /**
+     * Save report signature for different roles
+     * @param string $id
+     * @param array $data
+     * 
+     */
+    public function saveReportSignature(string $id, $data): void
+    {
+        $report = Report::Where('uuid', $id)->first();
+
+        if (!$report) {
+            throw new \Exception('Report not found.');
+        }
+
+        $signature = $data['signature'];
+        
+        [$meta, $imgData] = explode(',', $signature);
+
+        if (str_contains($meta, 'image/png')) {
+            $extension = 'png';
+        } elseif (str_contains($meta, 'image/jpeg') || str_contains($meta, 'image/jpg')) {
+            $extension = 'jpg';
+        } else {
+            $extension = 'png';
+        }
+
+        $decoded = base64_decode($imgData);
+
+        $fileName = 'signature_' . $data['role'] . '_' . $id . '.png';
+
+        $filePath = 'report_signatures/' . $fileName;
+
+        Storage::disk('public')->put($filePath, $decoded);
+
+        if($data['role'] === "landlord"){
+            $report->landlord_signature = $filePath;
+        } else if($data['role'] === "tenant"){
+            $report->tenant_signature = $filePath;
+        }
+
+        $report->update();
     }
 }
 
