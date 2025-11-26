@@ -14,7 +14,7 @@ class TemplateRepository implements \App\Repositories\Contracts\TemplateReposito
         $columnName = request()->input('columnName');
 
         $query = Template::with('areas')
-            ->where('realtor_id', $userId)
+            ->where('inspector_id', $userId)
             ->orWhere('is_default', true)
             ->orderBy('is_default', 'ASC')
             ->orderBy('created_at', 'DESC');

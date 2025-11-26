@@ -20,7 +20,7 @@ class UserBillingDetail extends Model
     ];
 
     /**
-     * Billing Detail belongs to a user (realtor).
+     * Billing Detail belongs to a user (inspector).
      */
 
     public function user()

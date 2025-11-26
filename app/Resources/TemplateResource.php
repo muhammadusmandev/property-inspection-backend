@@ -19,7 +19,7 @@ class TemplateResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'is_default' => (bool) $this->is_default,
-            'realtor_id' => $this->realtor_id,
+            'inspector_id' => $this->inspector_id,
             'areas' => InspectionAreaResource::collection($this->whenLoaded('areas')),
         ];
     }

@@ -68,7 +68,7 @@ class AuthRepository implements AuthRepositoryContract
                     'date_of_birth' => $userDetails['date_of_birth'],
                 ]);
 
-                $user->assignRole('realtor');
+                $user->assignRole('inspector');
 
                 return $user;
             });

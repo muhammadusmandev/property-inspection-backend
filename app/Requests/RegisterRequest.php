@@ -72,7 +72,7 @@ class RegisterRequest extends FormRequest
             'role' => [
                 'nullable',
                 'string',
-                'in:realtor'
+                'in:inspector'
             ],
 
         ];

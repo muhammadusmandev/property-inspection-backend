@@ -25,7 +25,7 @@ class Property extends Model
     ];
 
     /**
-     * property belongs to a user (realtor).
+     * property belongs to a user (inspector).
      */
 
     public function user()

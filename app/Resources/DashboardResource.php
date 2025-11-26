@@ -18,7 +18,7 @@ class DashboardResource extends JsonResource
         return [
             'generated_reports' => Report::where('user_id', $this->id)->where('status', 'completed')->count(),
             'total_properties' => Property::where('user_id', $this->id)->count(),
-            'total_clients' => User::where('realtor_id', $this->id)->count(),
+            'total_clients' => User::where('inspector_id', $this->id)->count(),
             'total_branches' => Branch::where('user_id', $this->id)->count()
         ];
     }

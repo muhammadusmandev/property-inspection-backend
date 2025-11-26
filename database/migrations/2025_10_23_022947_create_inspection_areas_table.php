@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inspection_areas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('realtor_id')
+            $table->foreignId('inspector_id')
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();

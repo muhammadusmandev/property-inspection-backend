@@ -15,7 +15,7 @@ class InspectionArea extends Model
      */
     protected $fillable = [
         'name',
-        'realtor_id',
+        'inspector_id',
         'is_default',
     ];
 
@@ -29,11 +29,11 @@ class InspectionArea extends Model
     }
 
     /**
-     * Item belongs to realtor.
+     * Item belongs to inspector.
      */
 
-    public function realtor()
+    public function inspector()
     {
-        return $this->belongsTo(User::class, 'realtor_id');
+        return $this->belongsTo(User::class, 'inspector_id');
     }
 }

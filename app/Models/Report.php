@@ -47,7 +47,7 @@ class Report extends Model
     }
 
     /**
-     * property belongs to a user (realtor/inspector).
+     * property belongs to a user (inspector).
      */
 
     public function user()

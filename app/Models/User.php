@@ -36,7 +36,7 @@ class User extends Authenticatable
         'password',
         'is_active',
         'last_login_at',
-        'realtor_id',
+        'inspector_id',
     ];
 
     /**
@@ -111,7 +111,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor may have many branches of the property.
+     * Inspector may have many branches of the property.
      */
     public function branches()
     {
@@ -119,7 +119,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor has many properties.
+     * Inspector has many properties.
      */
     public function properties()
     {
@@ -127,21 +127,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor has many clients.
+     * Inspector has many clients.
      */
 
     public function clients()
     {
-        return $this->hasMany(self::class, 'realtor_id');
+        return $this->hasMany(self::class, 'inspector_id');
     }
 
     /**
-     * Client belongs to realtor.
+     * Client belongs to inspector.
      */
 
-    public function realtor()
+    public function inspector()
     {
-        return $this->belongsTo(self::class, 'realtor_id');
+        return $this->belongsTo(self::class, 'inspector_id');
     }
 
     /**

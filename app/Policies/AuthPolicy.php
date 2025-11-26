@@ -13,6 +13,6 @@ class AuthPolicy
      */
     public function allowedRoles(User $user): bool
     {
-        return !empty(array_intersect($user->getRoleNames()->toArray(), ['realtor']));
+        return !empty(array_intersect($user->getRoleNames()->toArray(), ['inspector']));
     }
 }

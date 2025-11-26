@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('realtor_id')->nullable();
+            $table->unsignedBigInteger('inspector_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('is_default')->default(false);
-            $table->foreign('realtor_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('inspector_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class Template extends Model
         'name', 
         'description', 
         'is_default', 
-        'realtor_id'
+        'inspector_id'
     ];
 
     /**
@@ -27,10 +27,10 @@ class Template extends Model
     }
 
     /**
-     * Template belongs to user/realtor.
+     * Template belongs to user/inspector.
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'realtor_id');
+        return $this->belongsTo(User::class, 'inspector_id');
     }
 }

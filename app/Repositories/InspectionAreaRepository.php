@@ -20,7 +20,7 @@ class InspectionAreaRepository implements \App\Repositories\Contracts\Inspection
         $columnName = request()->input('columnName');
 
         $query = InspectionArea::with('items')
-            ->where('realtor_id', auth()->id())
+            ->where('inspector_id', auth()->id())
             ->orWhere('is_default', true)
             ->orderBy('is_default', 'ASC')
             ->orderBy('created_at', 'DESC');
@@ -80,7 +80,7 @@ class InspectionAreaRepository implements \App\Repositories\Contracts\Inspection
         $area = InspectionArea::create([
             'name' => $data['name'],
             'is_default' => false,
-            'realtor_id' => auth()->id()
+            'inspector_id' => auth()->id()
         ]);
 
         foreach ($data['items'] as $key => $item) {

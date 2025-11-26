@@ -86,7 +86,7 @@ class InspectionAreaService implements InspectionAreaServiceContract
             throw new \Exception('Area not found.');
         }
 
-        if ($area->realtor_id !== auth()->id()) {
+        if ($area->inspector_id !== auth()->id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
@@ -112,7 +112,7 @@ class InspectionAreaService implements InspectionAreaServiceContract
             throw new \Exception('Inspection area not found.');
         }
 
-        if ($area->realtor_id !== auth()->id()) {
+        if ($area->inspector_id !== auth()->id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 

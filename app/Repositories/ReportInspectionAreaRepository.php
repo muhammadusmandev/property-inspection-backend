@@ -34,7 +34,7 @@ class ReportInspectionAreaRepository implements ReportInspectionAreaRepositoryCo
             'condition' => $data['condition'],
             'cleanliness' => $data['cleanliness'],
             'description' => $data['description'] ?? null,
-            'realtor_id' => auth()->id(),
+            'inspector_id' => auth()->id(),
         ]);
     }
 

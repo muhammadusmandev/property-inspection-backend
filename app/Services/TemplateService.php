@@ -28,7 +28,7 @@ class TemplateService implements TemplateServiceContract
     public function createTemplate(array $data): Template
     {
         return DB::transaction(function () use ($data) {
-            $data['realtor_id'] = Auth::id();
+            $data['inspector_id'] = Auth::id();
             $template = $this->templateRepository->create($data);
 
             foreach ($data['areas'] as $area) {
@@ -58,7 +58,7 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->realtor_id !== Auth::id()) {
+        if ($template->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
@@ -78,7 +78,7 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->realtor_id !== Auth::id()) {
+        if ($template->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 

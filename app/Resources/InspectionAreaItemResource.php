@@ -18,7 +18,7 @@ class InspectionAreaItemResource extends JsonResource
         return [
             'id'     => $this->id,
             'name'   => $this->name,
-            'realtor_id'   => $this->realtor_id,
+            'inspector_id'   => $this->inspector_id,
             'is_default' => (bool) $this->status,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
