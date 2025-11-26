@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reports', function (Blueprint $table) {
-            $table->string('download_link')->nullable()->after('notes');
+            $table->string('pdf_path')->nullable()->after('notes');
             $table->datetime('locked_at')->nullable()->after('updated_at');
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('reports', function (Blueprint $table) {
-            $table->dropColumn('download_link');
+            $table->dropColumn('pdf_path');
             $table->dropColumn('locked_at');
         });
     }

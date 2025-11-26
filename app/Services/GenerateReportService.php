@@ -41,7 +41,7 @@ class GenerateReportService implements GenerateReportServiceContract
             })
             ->save($savePath);
 
-        return $reportPdfName;
+        return 'reports/' . $reportPdfName;
     }
 
     /**

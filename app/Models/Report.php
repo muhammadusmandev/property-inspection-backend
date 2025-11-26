@@ -17,7 +17,8 @@ class Report extends Model
         'status',
         'notes',
         'report_date',
-        'locked_at'
+        'locked_at',
+        'pdf_path'
     ];
 
     /**

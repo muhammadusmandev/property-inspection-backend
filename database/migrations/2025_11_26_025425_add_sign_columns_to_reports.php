@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reports', function (Blueprint $table) {
-            $table->string('landlord_signature')->nullable()->after('download_link');
+            $table->string('landlord_signature')->nullable()->after('pdf_path');
             $table->string('tenant_signature')->nullable()->after('landlord_signature');
         });
     }

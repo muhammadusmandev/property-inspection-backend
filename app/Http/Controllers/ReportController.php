@@ -33,8 +33,12 @@ class ReportController extends Controller
     public function saveReportPDF($report_id)
     {
         $pdfName = $this->generateReportService->savePdfReport($report_id);
+        Report::where('id', $report_id)->update([
+            'pdf_path' => $pdfName,
+            'locked_at' => now(),
+            'status' => 'completed'
+        ]);
         $downloadUrl = route('reports.download', ['file' => $pdfName]);
-        Report::where('id', $report_id)->update(['download_link' => $downloadUrl]);
         echo "Pdf saved successfully: " . $downloadUrl;
     }
 
