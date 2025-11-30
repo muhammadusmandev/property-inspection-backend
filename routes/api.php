@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Client\ClientController;
 use App\Http\Controllers\Api\Reports\ReportController;
 use App\Http\Controllers\Api\Reports\ReportInspectionAreaController;
 use App\Http\Controllers\Api\Reports\ReportInspectionAreaDefectController;
+use App\Http\Controllers\Api\Reports\ReportContactController;
 use App\Http\Controllers\Api\Template\TemplateController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaController;
 use App\Http\Controllers\Api\InspectionArea\InspectionAreaItemController;
@@ -56,6 +57,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('report-inspection-areas', ReportInspectionAreaController::class);
         Route::apiResource('report-inspection-area-defects', ReportInspectionAreaDefectController::class);
         Route::apiResource('reports', ReportController::class);
+        Route::apiResource('report-contacts', ReportContactController::class);
         Route::apiResource('medias', MediaController::class);
         Route::get('clients/properties/{id}', [ClientController::class, 'clientProperties']);
         Route::post('clients/associate-property', [ClientController::class, 'associateProperty']);
@@ -65,6 +67,7 @@ Route::prefix('v1')->group(function () {
         Route::put('generate-report/{id}', [ReportController::class, 'generateReport']);
         Route::get('check-report-status/{id}', [ReportController::class, 'checkReportStatus']);
         Route::post('save-report-signature/{id}', [ReportController::class, 'saveReportSignature']);
+        Route::get('list-report-contacts/{id}', [ReportContactController::class, 'index']);
         Route::get('billings/show-billing-data', [BillingController::class, 'showBillingData']);
         Route::post('billings/activate-subscription', [BillingController::class, 'activateSubscription']);
         Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);

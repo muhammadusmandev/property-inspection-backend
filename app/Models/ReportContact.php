@@ -27,10 +27,25 @@ class ReportContact extends Model
      * @return array<string, string>
      */
     protected $casts = [
+        'uuid' => 'string',
         'can_view' => 'boolean',
         'can_sign' => 'boolean',
         'signed_at' => 'datetime',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($contact) {
+            if (empty($contact->uuid)) {
+                $contact->uuid = (string) \Str::uuid();
+            }
+        });
+    }
 
     /**
      * Contact belongs to report

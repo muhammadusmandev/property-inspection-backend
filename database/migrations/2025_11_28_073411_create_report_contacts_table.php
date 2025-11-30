@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('report_contacts', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('report_id')->constrained()->onDelete('cascade');
             $table->enum('contact_type', [
                 'landlord',
@@ -35,8 +36,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->boolean('can_view')->default(false);
             $table->boolean('can_sign')->default(false);
+            $table->boolean('can_email')->default(false);
+            $table->boolean('can_sms')->default(false);
             $table->string('signature_token', 64)->nullable()->unique();
             $table->string('signature_path')->nullable();
             $table->text('signature_data')->nullable()->comment('Raw base64 canvas data');
