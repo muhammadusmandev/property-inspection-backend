@@ -7,7 +7,7 @@ use App\Models\User;
 
 interface ClientRepository
 {
-    public function getAllForRealtor(int $realtorId, int $perPage = 10): AnonymousResourceCollection;
+    public function getAllForInspector(int $inspectorId, int $perPage = 10): AnonymousResourceCollection;
     public function findById(int $id): ?User;
     public function create(array $data): User;
     public function update(User $client, array $data): User;

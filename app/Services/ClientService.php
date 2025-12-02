@@ -21,12 +21,12 @@ class ClientService implements ClientServiceContract
 
     public function listClients(): AnonymousResourceCollection
     {
-        return $this->clientRepository->getAllForRealtor(Auth::id());
+        return $this->clientRepository->getAllForInspector(Auth::id());
     }
 
     public function createClient(array $data): User
     {
-        $data['realtor_id'] = Auth::id();
+        $data['inspector_id'] = Auth::id();
         return $this->clientRepository->create($data);
     }
 
@@ -38,7 +38,7 @@ class ClientService implements ClientServiceContract
             throw new \Exception('Client not found.');
         }
 
-        if ($client->realtor_id !== Auth::id()) {
+        if ($client->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
@@ -53,7 +53,7 @@ class ClientService implements ClientServiceContract
             throw new \Exception('Client not found.');
         }
 
-        if ($client->realtor_id !== Auth::id()) {
+        if ($client->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
@@ -68,7 +68,7 @@ class ClientService implements ClientServiceContract
             throw new \Exception('Client not found.');
         }
 
-        if ($client->realtor_id !== Auth::id()) {
+        if ($client->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 

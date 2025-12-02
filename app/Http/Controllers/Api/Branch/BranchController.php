@@ -35,7 +35,7 @@ class BranchController extends Controller
     {
         try {
             $data = $this->branchService->createBranch($request->validated());
-            return $this->successResponse(__('validationMessages.branch.created_successfully'), $data, 201);
+            return $this->successResponse(__('validationMessages.branch.created_successfully'), $data, 200);
         } catch (QueryException $qe) {
             $this->logException($qe, __('validationMessages.data_saved_failed'));
             return $this->errorResponse(__('validationMessages.data_saved_failed'), ['error' => $qe->getMessage()], 500);

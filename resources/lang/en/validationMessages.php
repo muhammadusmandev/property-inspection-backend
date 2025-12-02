@@ -13,7 +13,8 @@ return [
         'min' => 'Password must be at least :character characters.',
         'max' => 'Password must be under :character characters.',
         'regex' => 'Password must be mix (uppercase, lowercase, number, and special character).',
-        'must_new' => 'Please choose a password you haven\'t used before'
+        'must_new' => 'Please choose a password you haven\'t used before.',
+        'current_password_incorrect' => 'Current password must be correct.'
     ],
     'gender' => [
         'in' => 'Gender should be male, female or other.',
@@ -61,9 +62,22 @@ return [
     'client' => [
         'exists' => 'Client not found'
     ],
+    'data_fetch_success' => 'Data fetched successfully.',
+    'inspection_areas_fetch_api_failed' => 'Inpsection areas list API request failed.',
+    'resource_created_successfully' => 'Resource created successfully.',
+    'resource_updated_successfully' => 'Resource updated successfully.',
+    'resource_create_failed' => ':resource created failed.',
+    'resource_update_failed' => ':resource update failed.',
+    'resource_fetch_failed' => ':resource fetch failed.',
     'property' => [
         'exists' => 'Property not found'
     ],
+    'report' => [
+        'report_generation_queued' => 'Report generation queued successfully.',
+        'report_generated_failure' => 'Report generate failed.'
+    ],
     'data_fetch_success' => 'Data fetched successfully.',
     'action_done_success' => 'Action done successfully.',
+    'action_failed' => 'Action failed.',
+    'already_subscribe_but_try_billing' => 'You have already subscribed. Cannot access free trail page again.'
 ];

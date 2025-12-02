@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Template;
+use App\Resources\TemplateResource;
+use App\Models\{Template, TemplateInspectionArea};
 use App\Repositories\Contracts\TemplateRepository;
 use App\Services\Contracts\TemplateService as TemplateServiceContract;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -27,34 +28,27 @@ class TemplateService implements TemplateServiceContract
     public function createTemplate(array $data): Template
     {
         return DB::transaction(function () use ($data) {
-            $data['created_by'] = Auth::id();
+            $data['inspector_id'] = Auth::id();
             $template = $this->templateRepository->create($data);
 
-            foreach ($data['sections'] ?? [] as $sectionData) {
-                $section = $template->sections()->create([
-                    'name' => $sectionData['name'],
-                    'order' => $sectionData['order'] ?? 0,
+            foreach ($data['areas'] as $area) {
+                $section = TemplateInspectionArea::create([
+                    'template_id' => $template->id,
+                    'inspection_area_id' => $area,
                 ]);
-
-                foreach ($sectionData['items'] ?? [] as $itemData) {
-                    $section->items()->create([
-                        'name' => $itemData['name'],
-                        'description' => $itemData['description'] ?? null,
-                    ]);
-                }
             }
 
-            return $template->load('sections.items');
+            return $template;
         });
     }
 
-    public function showTemplate(int $id): Template
+    public function showTemplate(int $id): TemplateResource
     {
         $template = $this->templateRepository->findById($id);
         if (!$template) {
             throw new \Exception('Template not found.');
         }
-        return $template;
+        return new TemplateResource($template);
     }
 
     public function updateTemplate(int $id, array $data): Template
@@ -64,30 +58,16 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->created_by !== Auth::id()) {
+        if ($template->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
 
         return DB::transaction(function () use ($template, $data) {
             $this->templateRepository->update($template, $data);
 
-            $template->sections()->delete();
+            $template->areas()->sync($data['areas']);
 
-            foreach ($data['sections'] ?? [] as $sectionData) {
-                $section = $template->sections()->create([
-                    'name' => $sectionData['name'],
-                    'order' => $sectionData['order'] ?? 0,
-                ]);
-
-                foreach ($sectionData['items'] ?? [] as $itemData) {
-                    $section->items()->create([
-                        'name' => $itemData['name'],
-                        'description' => $itemData['description'] ?? null,
-                    ]);
-                }
-            }
-
-            return $template->load('sections.items');
+            return $template;
         });
     }
 
@@ -98,9 +78,17 @@ class TemplateService implements TemplateServiceContract
             throw new \Exception('Template not found.');
         }
 
-        if ($template->created_by !== Auth::id()) {
+        if ($template->inspector_id !== Auth::id()) {
             throw new AuthorizationException('Unauthorized access.');
         }
+
+        /** 
+         * Todo: uncomment when reports added
+         * $hasReports = $template->whereHas('reports')->exists();
+         *  if ($hasReports) {
+         *     throw new \Exception("Action forbidden. One or more reports using same template.");
+         *  }
+         **/
 
         $this->templateRepository->delete($template);
     }

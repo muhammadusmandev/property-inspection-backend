@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "sass": "^1.93.2"
+  },
+  "dependencies": {
+    "puppeteer": "^24.30.0"
   }
 }

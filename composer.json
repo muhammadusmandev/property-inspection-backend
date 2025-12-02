@@ -7,10 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "intervention/image": "^3.11",
+        "intervention/image-laravel": "^1.5",
+        "laravel/cashier": "^16.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "propaganistas/laravel-phone": "^6.0",
+        "spatie/laravel-pdf": "^1.8",
         "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
@@ -27,7 +31,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/ImageHelpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
