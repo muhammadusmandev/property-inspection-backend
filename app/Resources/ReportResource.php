@@ -4,7 +4,7 @@ namespace App\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Resources\InspectionAreaResource;
+use App\Resources\{ InspectionAreaResource, ReportContactResource };
 
 class ReportResource extends JsonResource
 {
@@ -31,6 +31,7 @@ class ReportResource extends JsonResource
             'template' => $this->template,
             'areas' => ReportAreaResource::collection($this->whenLoaded('areas')) ?? [],
             'checklist' => $this->checklistItemsWithStatus(),
+            'contacts' => ReportContactResource::collection($this->contacts),
         ];
     }
 }

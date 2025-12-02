@@ -71,6 +71,11 @@ class Report extends Model
         return $this->hasMany(ReportInspectionArea::class);
     }
 
+    public function contacts()
+    {
+        return $this->hasMany(ReportContact::class);
+    }
+
     public function checklistItems()
     {
         return $this->hasMany(ReportChecklistItem::class);
