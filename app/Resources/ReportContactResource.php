@@ -25,6 +25,7 @@ class ReportContactResource extends JsonResource
             'signature_path' => $this->signature_path,
             'signature_url'  => $this->signature_url,
             'signed_at'      => $this->signed_at,
+            'report'         => $this->report,
         ];
     }
 }

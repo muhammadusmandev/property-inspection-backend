@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\Contracts\ReportContactService as ReportContactServiceContract;
 use App\Repositories\Contracts\ReportContactRepository as ReportContactRepositoryContract;
 use App\Resources\ReportContactResource;
+use App\Models\ReportContact;
 
 class ReportContactService implements ReportContactServiceContract
 {
@@ -53,7 +54,21 @@ class ReportContactService implements ReportContactServiceContract
     }
 
     /**
-     * Update report contact.
+     * Show report contact.
+     * @param int $uuid
+     */
+    public function showContact(string $uuid): ReportContactResource
+    {
+        $contact = ReportContact::with(['report'])
+            ->where('uuid', $uuid)
+            ->first();
+
+        return new ReportContactResource($contact);
+
+    }
+
+    /**
+     * Delete report contact.
      * @param int $id
      */
     public function delete(int $id): void

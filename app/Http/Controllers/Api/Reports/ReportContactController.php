@@ -95,6 +95,29 @@ class ReportContactController extends Controller
     }
 
     /**
+     * Show report contact.
+     * 
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception unexpected error
+     * 
+     */
+    public function show(string $id): JsonResponse
+    {
+        try {
+            $data = $this->reportContactService->showContact($id);
+            return $this->successResponse(__('validationMessages.data_fetch_success'), $data);
+
+        } catch (\Exception $e) {
+            $this->logException($e, __('validationMessages.resource_fetch_failed', ['resource' => 'Report Contact']));
+            return $this->errorResponse(__('validationMessages.something_went_wrong'), [
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Delete report contact.
      * 
      * @param int $id
