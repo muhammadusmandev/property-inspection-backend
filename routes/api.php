@@ -26,8 +26,8 @@ use App\Http\Controllers\Api\Country\CountryController;
 Route::prefix('v1')->group(function () {
 
     Route::prefix('auth')->group(function () {
-        Route::post('login', [AuthController::class, 'login']);
-        Route::post('register', [AuthController::class, 'register']);
+        Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+        Route::post('register', [AuthController::class, 'register'])->name('auth.register');
         Route::delete('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     });
 
