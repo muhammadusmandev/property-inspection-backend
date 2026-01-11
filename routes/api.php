@@ -28,12 +28,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->name('auth.login');
         Route::post('register', [AuthController::class, 'register'])->name('auth.register');
-        Route::delete('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+        Route::delete('logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth:sanctum');
     });
 
     Route::prefix('otp')->group(function () {
-        Route::post('verify', [OtpVerificationController::class, 'verify']);
-        Route::post('resend', [OtpVerificationController::class, 'resend']);
+        Route::post('verify', [OtpVerificationController::class, 'verify'])->name('auth.verify_otp');
+        Route::post('resend', [OtpVerificationController::class, 'resend'])->name('auth.resend_otp');
     });
 
     Route::prefix('forgot-password')->group(function () {
