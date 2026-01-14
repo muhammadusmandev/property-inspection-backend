@@ -36,7 +36,7 @@ class ClientController extends Controller
     {
         try {
             $data = $this->clientService->createClient($request->validated());
-            return $this->successResponse(__('validationMessages.client.created_successfully'), $data, 20);
+            return $this->successResponse(__('validationMessages.client.created_successfully'), $data, 200);
         } catch (QueryException $qe) {
             $this->logException($qe);
             return $this->errorResponse(__('validationMessages.data_saved_failed'), ['error' => $qe->getMessage()]);

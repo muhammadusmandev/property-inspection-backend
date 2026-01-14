@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\Contracts\OtpService as OtpServiceContract;
 use Illuminate\Support\Facades\Cache;
 use App\Enums\OtpIdentifier;
+use App\Events\RegistrationOtpVerified;
 use App\Models\User;
 
 class OtpService implements OtpServiceContract
@@ -28,9 +29,10 @@ class OtpService implements OtpServiceContract
      * @param string $identifier
      * @param string $identifierValue
      * @param int $otp
+     * @param string $intent
      * @return array
      */
-    public function verify(string $identifier, $identifierValue, int $otp): array
+    public function verify(string $identifier, string $identifierValue, int $otp, string $intent = ""): array
     {
         OtpIdentifier::in($identifier);
         
@@ -45,9 +47,15 @@ class OtpService implements OtpServiceContract
             if (Cache::get($otpKey) === $otp) {
                 Cache::forget($otpKey);
                 $status = 'verified';
+                
+                if($intent === "registration"){
+                    // Todo: additional logic if email/phone verified
+                    $user = User::where($identifier, $identifierValue)->first();
+                    $user->email_verified_at = now();
+                    $user->update();
 
-                // Todo: additional logic if email/phone verified
-                User::where($identifier, $identifierValue)->update(['email_verified_at' => now()]);
+                    event(new RegistrationOtpVerified($user));
+                }
                 
                 // Cache temporary otp verification token (Useful in next api calls e.g. reset password api)
                 $otpSessionToken = \Str::uuid()->toString();

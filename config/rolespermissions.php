@@ -5,7 +5,7 @@
 return [
 
     'roles' => [
-        'realtor' => 'realtor',
+        'inspector' => 'inspector',
         'client' => 'client',
         'admin' => 'admin',
     ],
@@ -21,7 +21,7 @@ return [
         'client' => [
             'forget password',
         ],
-        'realtor' => [
+        'inspector' => [
             'forget password',
         ],
     ],

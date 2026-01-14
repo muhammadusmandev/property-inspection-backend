@@ -10,13 +10,13 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ClientRepository implements ClientRepositoryContract
 {
-    public function getAllForRealtor(int $realtorId, int $perPage = 10): AnonymousResourceCollection
+    public function getAllForInspector(int $inspectorId, int $perPage = 10): AnonymousResourceCollection
     {
         $columnQuery = request()->input('columnQuery');
         $columnName = request()->input('columnName');
         
-        $query = User::where('realtor_id', $realtorId)
-            ->with('realtor')
+        $query = User::where('inspector_id', $inspectorId)
+            ->with('inspector')
             ->latest();
 
         if ($columnName && $columnQuery) {
@@ -49,7 +49,7 @@ class ClientRepository implements ClientRepositoryContract
 
     public function findById(int $id): ?User
     {
-        return User::with('realtor')
+        return User::with('inspector')
             ->find($id);
     }
 
@@ -61,7 +61,7 @@ class ClientRepository implements ClientRepositoryContract
             'phone_number' => $data['phone_number'] ? phone($data['phone_number'])->formatE164() : null,
             'password' => Hash::make(\Str::random(8)), // Todo: password if needed for client
             'gender' => $data['gender'],
-            'realtor_id'  => $data['realtor_id'],
+            'inspector_id'  => $data['inspector_id'],
             'is_active' => true
         ]);
 

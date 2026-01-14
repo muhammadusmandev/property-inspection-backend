@@ -38,7 +38,6 @@ class RegisterRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                'email:rfc,dns',
                 'max:200',
                 'unique:users,email'
             ],
@@ -72,7 +71,7 @@ class RegisterRequest extends FormRequest
             'role' => [
                 'nullable',
                 'string',
-                'in:realtor'
+                'in:inspector'
             ],
 
         ];

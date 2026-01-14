@@ -9,11 +9,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Cashier\Billable;
+use Storage;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, HasRoles;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles, Billable;
 
     protected $guard_name = 'api';
 
@@ -34,7 +36,7 @@ class User extends Authenticatable
         'password',
         'is_active',
         'last_login_at',
-        'realtor_id',
+        'inspector_id',
     ];
 
     /**
@@ -80,6 +82,15 @@ class User extends Authenticatable
                 $user->uuid = (string) Str::uuid();
             }
         });
+
+        static::deleting(function ($user) {
+            $media = $user->media;
+            if ($media->file_path && Storage::disk('public')->exists($media->file_path)) {
+                Storage::disk('public')->delete($media->file_path);
+            }
+
+            $media->delete();
+        });
     }
 
     /**
@@ -100,7 +111,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor may have many branches of the property.
+     * Inspector may have many branches of the property.
      */
     public function branches()
     {
@@ -108,7 +119,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor has many properties.
+     * Inspector has many properties.
      */
     public function properties()
     {
@@ -116,20 +127,28 @@ class User extends Authenticatable
     }
 
     /**
-     * Realtor has many clients.
+     * Inspector has many clients.
      */
 
     public function clients()
     {
-        return $this->hasMany(self::class, 'realtor_id');
+        return $this->hasMany(self::class, 'inspector_id');
     }
 
     /**
-     * Client belongs to realtor.
+     * Client belongs to inspector.
      */
 
-    public function realtor()
+    public function inspector()
     {
-        return $this->belongsTo(self::class, 'realtor_id');
+        return $this->belongsTo(self::class, 'inspector_id');
+    }
+
+    /**
+     * User have media.
+     */
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
     }
 }
