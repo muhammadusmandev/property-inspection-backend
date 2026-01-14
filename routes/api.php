@@ -37,8 +37,8 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('forgot-password')->group(function () {
-        Route::post('/request', [ForgotPasswordController::class, 'request']);
-        Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
+        Route::post('/request', [ForgotPasswordController::class, 'request'])->name('forgot_password.request');
+        Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('forgot_password.reset_password');
     });
 
     Route::get('countries/list', [CountryController::class, 'index']);
