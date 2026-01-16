@@ -41,13 +41,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('forgot_password.reset_password');
     });
 
-    Route::get('countries/list', [CountryController::class, 'index']);
+    Route::get('countries/list', [CountryController::class, 'index'])->name('countries.list');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth/user', function (Request $request) {
             return $request->user();
         });
-        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')
         Route::apiResource('properties', PropertyController::class);
         Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
