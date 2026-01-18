@@ -73,8 +73,8 @@ Route::prefix('v1')->group(function () {
         Route::get('subscriptions/status', [BillingController::class, 'subscriptionStatus']);
 
         Route::prefix('settings')->group(function () {
-            Route::get('/profile', [ProfileController::class, 'getProfile']);
-            Route::post('/update-profile', [ProfileController::class, 'updateProfile']);
+            Route::get('/profile', [ProfileController::class, 'getProfile'])->name('settings.get_profile');
+            Route::post('/update-profile', [ProfileController::class, 'updateProfile'])->name('settings.update_profile');
             Route::delete('/delete-profile-photo', [ProfileController::class, 'deleteProfilePhoto']);
             Route::put('/reset-password', [ProfileController::class, 'resetPassword']);
         });
