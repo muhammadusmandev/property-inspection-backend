@@ -47,9 +47,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/auth/user', function (Request $request) {
             return $request->user();
         });
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::apiResource('properties', PropertyController::class)->name('properties');
-        Route::apiResource('branches', BranchController::class)->name('branches');
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::apiResource('properties', PropertyController::class);
+        Route::apiResource('branches', BranchController::class);
         Route::apiResource('clients', ClientController::class);
         Route::apiResource('templates', TemplateController::class);
         Route::apiResource('inspection-areas', InspectionAreaController::class);
