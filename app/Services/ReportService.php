@@ -44,13 +44,8 @@ class ReportService implements ReportServiceContract
                 $query->where($columnName, 'LIKE', "%{$columnQuery}%");
             }
         }
-
-        // Todo: make trait/helper for getting boolean from request safely
-        $paginate = filter_var(
-            is_string($v = request()->input('paginate', true)) ? trim($v, "\"'") : $v,
-            FILTER_VALIDATE_BOOLEAN,
-            FILTER_NULL_ON_FAILURE
-        ) ?? true;
+        
+        $paginate = request_bool('paginate', true);
 
         if (!$paginate) {
             $reports = $query->get();
